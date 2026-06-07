@@ -1,75 +1,31 @@
--- Vertex Development UI Library
--- Source.lua
-
 local Vertex = {}
-Vertex.__index = Vertex
 
 function Vertex:CreateWindow(config)
-local Window = {}
-Window.Title = config.Title or "Vertex Development"
-
-```
-function Window:CreateTab(name)
-    local Tab = {}
-    Tab.Name = name
-
-    function Tab:CreateSection(name)
-        local Section = {}
-        Section.Name = name
-
-        function Section:CreateToggle(data)
-            local Toggle = {
-                Name = data.Name,
-                Value = data.Default or false,
-                Callback = data.Callback or function() end
-            }
-
-            function Toggle:Set(value)
-                self.Value = value
-                self.Callback(value)
-            end
-
-            return Toggle
-        end
-
-        function Section:CreateButton(data)
-            return {
-                Name = data.Name,
-                Callback = data.Callback
-            }
-        end
-
-        function Section:CreateSlider(data)
-            return {
-                Name = data.Name,
-                Min = data.Min or 0,
-                Max = data.Max or 100,
-                Default = data.Default or 0,
-                Callback = data.Callback
-            }
-        end
-
-        function Section:CreateDropdown(data)
-            return {
-                Name = data.Name,
-                Options = data.Options or {},
-                Callback = data.Callback
-            }
-        end
-
-        return Section
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "VertexUI"
+    gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    
+    local mainFrame = Instance.new("Frame")
+    mainFrame.Size = UDim2.new(0, 500, 0, 400)
+    mainFrame.Position = UDim2.new(0.5, -250, 0.5, -200)
+    mainFrame.BackgroundColor3 = Color3.fromRGB(30,30,40)
+    mainFrame.Parent = gui
+    
+    local title = Instance.new("TextLabel")
+    title.Text = config.Title or "Vertex"
+    title.Size = UDim2.new(1,0,0,30)
+    title.BackgroundColor3 = Color3.fromRGB(50,50,70)
+    title.TextColor3 = Color3.new(1,1,1)
+    title.Parent = mainFrame
+    
+    -- More instance creation...
+    
+    local Window = {}
+    function Window:CreateTab(name)
+        -- Create tab button and content frame
+        return Tab
     end
-
-    return Tab
-end
-
-return Window
-```
-
-end
-
-function Vertex.new()
-return setmetatable({}, Vertex)
+    return Window
 end
 
 return Vertex
