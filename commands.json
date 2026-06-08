@@ -1,1 +1,30 @@
-
+{
+    "commands": [
+        {
+            "action": "kick",
+            "target": "Player123",
+            "message": "Removed by dashboard"
+        },
+        {
+            "action": "warn",
+            "target": "Player456",
+            "message": "Please follow the rules."
+        },
+        {
+            "action": "ban",
+            "target": "Player789",
+            "message": "Banned by dashboard"
+        },
+        {
+            "action": "test",
+            "target": "Player123",
+            "message": "Connection test"
+        },
+        {
+            "action": "fly",
+            "target": "Player999",
+            "message": "Fly enabled",
+            "duration": 60
+        }
+    ]
+}
