@@ -1,87 +1,115 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Roblox Control Panel</title>
+    <title>Cookie Empire</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #181818;
+            text-align: center;
+            background: #222;
             color: white;
-            padding: 30px;
         }
 
         h1 {
-            color: #00ff88;
+            margin-top: 30px;
         }
 
-        input, select {
-            width: 300px;
-            padding: 10px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
+        #cookie {
+            font-size: 100px;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.1s;
+        }
+
+        #cookie:active {
+            transform: scale(0.9);
         }
 
         button {
             padding: 10px 20px;
-            background: #00ff88;
-            border: none;
-            border-radius: 5px;
+            margin: 10px;
+            font-size: 18px;
             cursor: pointer;
         }
 
-        textarea {
-            width: 100%;
-            height: 200px;
+        .panel {
             margin-top: 20px;
-            background: #222;
-            color: white;
-            border: none;
-            padding: 10px;
         }
     </style>
 </head>
 <body>
 
-    <h1>Roblox Dashboard</h1>
+<h1>🍪 Cookie Empire</h1>
 
-    <label>Action:</label><br>
-    <select id="action">
-        <option value="kick">Kick</option>
-        <option value="ban">Ban</option>
-        <option value="announce">Announce</option>
-        <option value="shutdown">Shutdown</option>
-    </select>
+<h2>Cookies: <span id="cookies">0</span></h2>
 
-    <br><br>
+<div id="cookie">🍪</div>
 
-    <label>Target Player:</label><br>
-    <input id="target" placeholder="PlayerName">
+<div class="panel">
+    <button onclick="buyCursor()">
+        Buy Cursor (+1/sec) Cost: <span id="cursorCost">10</span>
+    </button>
 
-    <br><br>
+    <button onclick="buyFactory()">
+        Buy Factory (+10/sec) Cost: <span id="factoryCost">100</span>
+    </button>
+</div>
 
-    <label>Message / Reason:</label><br>
-    <input id="message" placeholder="Reason">
+<h3>Cookies Per Second: <span id="cps">0</span></h3>
 
-    <br><br>
+<script>
+let cookies = 0;
 
-    <button onclick="generate()">Generate Command</button>
+let cursors = 0;
+let factories = 0;
 
-    <textarea id="output" readonly></textarea>
+let cursorCost = 10;
+let factoryCost = 100;
 
-    <script>
-        function generate() {
-            const command = {
-                action: document.getElementById("action").value,
-                target: document.getElementById("target").value,
-                message: document.getElementById("message").value,
-                timestamp: Date.now()
-            };
+function updateUI() {
+    document.getElementById("cookies").textContent = Math.floor(cookies);
+    document.getElementById("cursorCost").textContent = cursorCost;
+    document.getElementById("factoryCost").textContent = factoryCost;
+    document.getElementById("cps").textContent =
+        cursors + (factories * 10);
+}
 
-            document.getElementById("output").value =
-                JSON.stringify(command, null, 4);
-        }
-    </script>
+document.getElementById("cookie").onclick = function() {
+    cookies++;
+    updateUI();
+};
+
+function buyCursor() {
+    if (cookies >= cursorCost) {
+        cookies -= cursorCost;
+        cursors++;
+
+        cursorCost = Math.floor(cursorCost * 1.2);
+
+        updateUI();
+    }
+}
+
+function buyFactory() {
+    if (cookies >= factoryCost) {
+        cookies -= factoryCost;
+        factories++;
+
+        factoryCost = Math.floor(factoryCost * 1.4);
+
+        updateUI();
+    }
+}
+
+setInterval(() => {
+    cookies += cursors;
+    cookies += factories * 10;
+
+    updateUI();
+}, 1000);
+
+updateUI();
+</script>
 
 </body>
 </html>
