@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Roblox Control Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #181818;
+            color: white;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #00ff88;
+        }
+
+        input, select {
+            width: 300px;
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #00ff88;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-top: 20px;
+            background: #222;
+            color: white;
+            border: none;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Roblox Dashboard</h1>
+
+    <label>Action:</label><br>
+    <select id="action">
+        <option value="kick">Kick</option>
+        <option value="ban">Ban</option>
+        <option value="announce">Announce</option>
+        <option value="shutdown">Shutdown</option>
+    </select>
+
+    <br><br>
+
+    <label>Target Player:</label><br>
+    <input id="target" placeholder="PlayerName">
+
+    <br><br>
+
+    <label>Message / Reason:</label><br>
+    <input id="message" placeholder="Reason">
+
+    <br><br>
+
+    <button onclick="generate()">Generate Command</button>
+
+    <textarea id="output" readonly></textarea>
+
+    <script>
+        function generate() {
+            const command = {
+                action: document.getElementById("action").value,
+                target: document.getElementById("target").value,
+                message: document.getElementById("message").value,
+                timestamp: Date.now()
+            };
+
+            document.getElementById("output").value =
+                JSON.stringify(command, null, 4);
+        }
+    </script>
+
+</body>
+</html>
