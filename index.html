@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Hub</title>
+    <title>Vertex UI | Game Hub</title>
     <style>
         /* Reset and Base Styles */
         * {
@@ -42,32 +42,36 @@
             font-weight: bold;
             color: #00ff88;
             text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .nav-tabs {
             display: flex;
             list-style: none;
-            gap: 1.5rem;
+            gap: 1rem;
         }
 
         .tab-link {
             color: #aaaaaa;
             text-decoration: none;
-            font-size: 1.1rem;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: all 0.3s ease;
+            font-size: 1.05rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
             cursor: pointer;
+            border: 1px solid transparent;
         }
 
-        .tab-link:hover, .tab-link.active {
+        .tab-link:hover {
             color: #ffffff;
-            background-color: #333333;
+            background-color: #252525;
         }
 
         .tab-link.active {
-            border-bottom: 2px solid #00ff88;
-            border-radius: 4px 4px 0 0;
+            color: #121212;
+            background-color: #00ff88;
+            font-weight: bold;
         }
 
         /* Content Sections */
@@ -78,68 +82,158 @@
         }
 
         .content-section {
-            display: none; /* Hidden by default */
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
         .content-section.active {
-            display: block; /* Show active section */
+            display: block;
         }
 
-        /* Hero / Home Styling */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Home Section Styling */
         .hero {
             text-align: center;
-            padding: 4rem 1rem;
-            background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
-            border-radius: 8px;
-            margin-bottom: 2rem;
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+            border: 1px solid #333;
+            border-radius: 12px;
+            margin-bottom: 3rem;
         }
 
         .hero h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 1rem;
             color: #00ff88;
         }
 
-        /* Grid Layout for Browse/Executors */
+        .hero p {
+            font-size: 1.2rem;
+            color: #cccccc;
+        }
+
+        /* Search Bar & Filters */
+        .search-container {
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #00ff88;
+        }
+
+        /* Grid Layout */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2rem;
-            margin-top: 2rem;
         }
 
         .card {
-            background-color: #1e1e1e;
+            background-color: #1a1a1a;
             border: 1px solid #333;
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 1.5rem;
-            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
         }
 
         .card:hover {
             transform: translateY(-5px);
             border-color: #00ff88;
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.1);
         }
 
         .card h3 {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
             color: #00ff88;
+            font-size: 1.3rem;
         }
 
-        .btn {
+        .card p {
+            color: #bbbbbb;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .status-badge {
             display: inline-block;
-            background-color: #00ff88;
-            color: #121212;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
             border-radius: 4px;
             font-weight: bold;
-            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-online { background: rgba(0, 255, 136, 0.15); color: #00ff88; }
+        .status-offline { background: rgba(255, 75, 75, 0.15); color: #ff4b4b; }
+
+        .btn {
+            display: block;
+            text-align: center;
+            background-color: #00ff88;
+            color: #121212;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
             transition: background 0.2s;
+            border: none;
+            cursor: pointer;
+            width: 100%;
         }
 
         .btn:hover {
             background-color: #00cc6a;
+        }
+
+        .btn-secondary {
+            background-color: #333;
+            color: #fff;
+            margin-top: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background-color: #444;
+        }
+
+        /* Script Code Blocks */
+        .code-box {
+            background-color: #101010;
+            border: 1px solid #222;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            color: #00ff88;
+            overflow-x: auto;
+            white-space: nowrap;
+            margin-bottom: 1rem;
+        }
+
+        section h2 {
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #00ff88;
+            padding-left: 0.75rem;
         }
     </style>
 </head>
@@ -147,7 +241,7 @@
 
     <header>
         <nav class="navbar">
-            <a href="#" class="logo">GameSpace</a>
+            <a href="#" class="logo">Vertex UI</a>
             <ul class="nav-tabs">
                 <li><a class="tab-link active" onclick="switchTab(event, 'home')">Home</a></li>
                 <li><a class="tab-link" onclick="switchTab(event, 'browse')">Browse</a></li>
@@ -160,52 +254,77 @@
 
         <section id="home" class="content-section active">
             <div class="hero">
-                <h1>Welcome to GameSpace</h1>
-                <p>Your ultimate hub for browsing games, tools, and scripts.</p>
+                <h1>Vertex UI Hub</h1>
+                <p>Your streamlined layout for browsing active scripts, games, and executor utilities.</p>
             </div>
-            <h2>Featured Content</h2>
-            <p>Check out the tabs above to explore our library of games and available executors.</p>
+            <h2>Announcements & Updates</h2>
+            <div class="card" style="width: 100%; max-width: 100%;">
+                <h3>Welcome to the Release!</h3>
+                <p>Everything is fully responsive and configured natively. Navigate through the top bar to filter scripts instantly or grab recommended software tools.</p>
+            </div>
         </section>
 
         <section id="browse" class="content-section">
-            <h2>Browse Games</h2>
-            <p>Explore available titles and projects below.</p>
+            <h2>Browse Games & Scripts</h2>
             
-            <div class="grid">
-                <div class="card">
-                    <h3>Game Title One</h3>
-                    <p>A short description of the game, features, or gameplay elements goes right here.</p>
-                    <a href="#" class="btn">Play Now</a>
+            <div class="search-container">
+                <input type="text" id="scriptSearch" class="search-input" onkeyup="filterScripts()" placeholder="Search scripts or games by title...">
+            </div>
+            
+            <div class="grid" id="scriptGrid">
+                <div class="card script-item">
+                    <div>
+                        <span class="status-badge status-online">Operational</span>
+                        <h3>Blox Fruits Script</h3>
+                    </div>
+                    <p>Features auto-farm, teleportation, chest collection, and skill mastery optimization settings.</p>
+                    <div class="code-box">loadstring(game:HttpGet("..."))()</div>
+                    <button class="btn" onclick="copyScript(this, 'loadstring(game:HttpGet(\'https://raw.githubusercontent.com/vertexproduction/script1/main.lua\'))()')">Copy Script</button>
                 </div>
-                <div class="card">
-                    <h3>Game Title Two</h3>
-                    <p>A short description of the game, features, or gameplay elements goes right here.</p>
-                    <a href="#" class="btn">Play Now</a>
+
+                <div class="card script-item">
+                    <div>
+                        <span class="status-badge status-online">Operational</span>
+                        <h3>Pet Simulator X</h3>
+                    </div>
+                    <p>Automates egg hatching, currency generation, diamond farming, and multi-target inventory management.</p>
+                    <div class="code-box">loadstring(game:HttpGet("..."))()</div>
+                    <button class="btn" onclick="copyScript(this, 'loadstring(game:HttpGet(\'https://raw.githubusercontent.com/vertexproduction/script2/main.lua\'))()')">Copy Script</button>
                 </div>
-                <div class="card">
-                    <h3>Game Title Three</h3>
-                    <p>A short description of the game, features, or gameplay elements goes right here.</p>
-                    <a href="#" class="btn">Play Now</a>
+
+                <div class="card script-item">
+                    <div>
+                        <span class="status-badge status-offline">Patching</span>
+                        <h3>Arsenal Aimbot</h3>
+                    </div>
+                    <p>Includes customizable silent aim, wall-bang execution, triggerbot features, and complete ESP framework mapping.</p>
+                    <div class="code-box">-- Currently Updating --</div>
+                    <button class="btn btn-secondary" disabled style="cursor: not-allowed;">Unavailable</button>
                 </div>
             </div>
         </section>
 
         <section id="executors" class="content-section">
-            <h2>Executors & Tools</h2>
-            <p>Find the latest compatible tools and utilities here.</p>
+            <h2>Recommended Executors & Tools</h2>
+            <p style="margin-bottom: 1.5rem; color: #aaa;">Ensure your external tools match execution protocols before initializing standard environments.</p>
             
             <div class="grid">
                 <div class="card">
-                    <h3>Tool/Executor Alpha</h3>
-                    <p>Version: 1.0.2<br>Status: <span style="color: #00ff88;">Updated</span></p>
-                    <p>Details regarding compatibility and features.</p>
-                    <a href="#" class="btn">Download</a>
+                    <div>
+                        <span class="status-badge status-online">Updated</span>
+                        <h3>Executor Alpha (PC)</h3>
+                    </div>
+                    <p>Level 7 script runner built for high stability and reliable custom UI rendering across system structures.</p>
+                    <a href="#" target="_blank" class="btn">Get Download</a>
                 </div>
+
                 <div class="card">
-                    <h3>Tool/Executor Beta</h3>
-                    <p>Version: 2.1.0<br>Status: <span style="color: #00ff88;">Updated</span></p>
-                    <p>Details regarding compatibility and features.</p>
-                    <a href="#" class="btn">Download</a>
+                    <div>
+                        <span class="status-badge status-online">Updated</span>
+                        <h3>Executor Beta (Android)</h3>
+                    </div>
+                    <p>Optimized mobile environments running full package layouts without causing memory throttling or crashing.</p>
+                    <a href="#" target="_blank" class="btn">Get Download</a>
                 </div>
             </div>
         </section>
@@ -213,27 +332,53 @@
     </main>
 
     <script>
+        // Smooth Tab Switching Layout
         function switchTab(event, sectionId) {
-            // Prevent default anchor behavior
             event.preventDefault();
 
-            // Hide all content sections
             const sections = document.querySelectorAll('.content-section');
-            sections.forEach(section => {
-                section.classList.remove('active');
-            });
+            sections.forEach(section => section.classList.remove('active'));
 
-            // Remove active class from all tab links
             const tabs = document.querySelectorAll('.tab-link');
-            tabs.forEach(tab => {
-                tab.classList.remove('active');
-            });
+            tabs.forEach(tab => tab.classList.remove('active'));
 
-            // Show the selected section
             document.getElementById(sectionId).classList.add('active');
-
-            // Add active class to the clicked tab
             event.currentTarget.classList.add('active');
+        }
+
+        // Live Real-Time Search Filter
+        function filterScripts() {
+            const input = document.getElementById('scriptSearch').value.toLowerCase();
+            const cards = document.getElementsByClassName('script-item');
+
+            for (let i = 0; i < cards.length; i++) {
+                const title = cards[i].getElementsByTagName('h3')[0].innerText.toLowerCase();
+                const description = cards[i].getElementsByTagName('p')[0].innerText.toLowerCase();
+                
+                if (title.includes(input) || description.includes(input)) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        // Interactive "Copy to Clipboard" Helper
+        function copyScript(button, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerText;
+                button.innerText = "Copied!";
+                button.style.backgroundColor = "#ffffff";
+                button.style.color = "#121212";
+                
+                setTimeout(() => {
+                    button.innerText = originalText;
+                    button.style.backgroundColor = "#00ff88";
+                    button.style.color = "#121212";
+                }, 2000);
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+            });
         }
     </script>
 
