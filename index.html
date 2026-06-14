@@ -15,22 +15,11 @@
     box-sizing:border-box;
 }
 
-:root{
-    --bg:#0b1120;
-    --card:#111827;
-    --glass:rgba(255,255,255,.05);
-    --border:rgba(255,255,255,.08);
-    --primary:#2563eb;
-    --text:#ffffff;
-    --muted:#94a3b8;
-}
-
 body{
-    font-family:'Inter',sans-serif;
-    background:var(--bg);
-    color:var(--text);
+    font-family:Inter,sans-serif;
+    background:#0b1120;
+    color:white;
     min-height:100vh;
-    overflow-x:hidden;
 }
 
 body::before{
@@ -38,48 +27,39 @@ body::before{
     position:fixed;
     inset:0;
     background:
-    radial-gradient(circle at top left,#2563eb40,transparent 35%),
-    radial-gradient(circle at bottom right,#7c3aed40,transparent 35%);
+    radial-gradient(circle at top left,#2563eb33,transparent 35%),
+    radial-gradient(circle at bottom right,#7c3aed33,transparent 35%);
     z-index:-1;
 }
 
-/* NAVBAR */
-
 .navbar{
-    position:sticky;
-    top:0;
-    z-index:100;
     display:flex;
     justify-content:center;
     padding:18px;
     backdrop-filter:blur(20px);
-    background:rgba(8,12,22,.75);
-    border-bottom:1px solid var(--border);
+    background:rgba(0,0,0,.25);
+    border-bottom:1px solid rgba(255,255,255,.08);
 }
 
 .nav-links{
     display:flex;
-    gap:14px;
+    gap:15px;
 }
 
 .nav-btn{
     border:none;
     background:transparent;
-    color:var(--muted);
+    color:#94a3b8;
     padding:10px 22px;
     border-radius:12px;
     cursor:pointer;
     font-weight:600;
-    transition:.25s;
 }
 
-.nav-btn:hover,
 .nav-btn.active{
-    background:var(--primary);
+    background:#2563eb;
     color:white;
 }
-
-/* PAGES */
 
 .page{
     display:none;
@@ -89,87 +69,64 @@ body::before{
     display:block;
 }
 
-/* HOME */
-
 .hero{
-    max-width:1200px;
-    margin:auto;
     text-align:center;
-    padding:120px 25px;
+    padding:120px 20px;
 }
 
 .hero h1{
     font-size:4rem;
-    font-weight:800;
     margin-bottom:15px;
 }
 
 .hero p{
-    color:var(--muted);
-    font-size:1.15rem;
+    color:#94a3b8;
 }
 
-/* BROWSE */
-
-.browse-wrapper{
+.browse{
     max-width:1500px;
     margin:auto;
     padding:30px;
 }
 
-.search-box{
+.search{
     max-width:700px;
-    margin:0 auto 30px;
+    margin:0 auto 25px;
 }
 
-.search-box input{
+.search input{
     width:100%;
     padding:18px;
     border:none;
-    outline:none;
-    border-radius:18px;
-    background:var(--glass);
-    border:1px solid var(--border);
-    backdrop-filter:blur(20px);
+    border-radius:16px;
+    background:rgba(255,255,255,.06);
     color:white;
-    font-size:15px;
+    outline:none;
 }
 
 .layout{
     display:grid;
-    grid-template-columns:260px 1fr;
+    grid-template-columns:250px 1fr;
     gap:25px;
 }
 
-/* FILTERS */
-
 .sidebar{
-    background:var(--glass);
-    border:1px solid var(--border);
-    backdrop-filter:blur(20px);
-    border-radius:24px;
-    padding:24px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
+    padding:20px;
     height:fit-content;
 }
 
 .sidebar h3{
-    margin-bottom:18px;
+    margin-bottom:15px;
 }
 
-.filter{
-    display:flex;
-    align-items:center;
-    gap:10px;
+.sidebar label{
+    display:block;
     margin-bottom:12px;
-    color:#dbe4f0;
+    color:#cbd5e1;
 }
-
-.filter input{
-    width:18px;
-    height:18px;
-}
-
-/* CARDS */
 
 .cards{
     display:grid;
@@ -177,116 +134,100 @@ body::before{
     gap:24px;
 }
 
-.game-card{
+.card{
     display:none;
-    background:var(--glass);
-    border:1px solid var(--border);
-    backdrop-filter:blur(20px);
-    border-radius:22px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
     overflow:hidden;
     transition:.25s;
 }
 
-.game-card.visible{
+.card.show{
     display:block;
 }
 
-.game-card:hover{
-    transform:translateY(-6px);
+.card:hover{
+    transform:translateY(-5px);
 }
 
-.banner-img{
+.thumbnail{
     width:100%;
     height:220px;
     object-fit:cover;
-    background:#111827;
-    display:block;
 }
 
-.info{
-    padding:20px;
+.content{
+    padding:18px;
 }
 
 .title{
     display:flex;
     align-items:center;
     gap:10px;
-    margin-bottom:15px;
+    margin-bottom:10px;
 }
 
-.title h2{
-    font-size:1.15rem;
-}
-
-.verified{
-    width:24px;
-    height:24px;
-    border-radius:50%;
+.verify{
+    width:22px;
+    height:22px;
     background:#22c55e;
+    border-radius:50%;
     display:flex;
     align-items:center;
     justify-content:center;
     font-size:12px;
-    font-weight:700;
+    font-weight:bold;
 }
 
 .stats{
     display:flex;
     gap:15px;
-    color:var(--muted);
-    margin-bottom:14px;
+    color:#94a3b8;
+    margin-bottom:12px;
     font-size:14px;
 }
 
 .tags{
     display:flex;
     gap:8px;
-    flex-wrap:wrap;
-    margin-bottom:16px;
+    margin-bottom:15px;
 }
 
 .tag{
-    background:#1d4ed8;
-    padding:6px 10px;
+    background:#2563eb;
+    padding:5px 10px;
     border-radius:999px;
     font-size:12px;
 }
 
-.game-id{
-    color:var(--muted);
+.gameid{
+    color:#94a3b8;
+    margin-bottom:15px;
     font-size:14px;
-    margin-bottom:16px;
 }
 
-.view-btn{
+.btn{
     width:100%;
     border:none;
-    border-radius:12px;
-    background:var(--primary);
+    background:#2563eb;
     color:white;
     padding:12px;
+    border-radius:12px;
     cursor:pointer;
     font-weight:600;
 }
 
-.view-btn:hover{
-    background:#1d4ed8;
-}
-
 .empty{
     text-align:center;
-    color:var(--muted);
+    color:#94a3b8;
     padding:100px 20px;
 }
 
-/* RESPONSIVE */
-
 @media(max-width:1200px){
-
     .cards{
         grid-template-columns:repeat(2,1fr);
     }
-
 }
 
 @media(max-width:900px){
@@ -296,17 +237,14 @@ body::before{
     }
 
     .hero h1{
-        font-size:2.7rem;
+        font-size:2.5rem;
     }
-
 }
 
 @media(max-width:700px){
-
     .cards{
         grid-template-columns:1fr;
     }
-
 }
 </style>
 </head>
@@ -319,99 +257,63 @@ body::before{
     </div>
 </nav>
 
-<!-- HOME -->
-
 <section id="home" class="page active">
-
     <div class="hero">
-        <h1>Discover Premium Game Builds</h1>
-
-        <p>
-            Search Roblox universe IDs and browse trusted game builds.
-        </p>
+        <h1>Discover Game Builds</h1>
+        <p>Search trusted game builds and resources.</p>
     </div>
-
 </section>
-
-<!-- BROWSE -->
 
 <section id="browse" class="page">
 
-<div class="browse-wrapper">
+<div class="browse">
 
-    <div class="search-box">
+    <div class="search">
         <input
-            type="text"
             id="searchInput"
-            placeholder="Enter Roblox Universe ID..."
+            type="text"
+            placeholder="Search by ID..."
         >
     </div>
 
     <div class="layout">
 
-        <aside class="sidebar">
-
+        <div class="sidebar">
             <h3>Filters</h3>
 
-            <label class="filter">
-                <input type="checkbox">
-                Trusted
-            </label>
+            <label><input type="checkbox"> Trusted</label>
+            <label><input type="checkbox"> Most Viewed</label>
+            <label><input type="checkbox"> Most Liked</label>
+            <label><input type="checkbox"> Key</label>
+            <label><input type="checkbox"> Keyless</label>
+        </div>
 
-            <label class="filter">
-                <input type="checkbox">
-                Most Viewed
-            </label>
+        <div>
 
-            <label class="filter">
-                <input type="checkbox">
-                Most Liked
-            </label>
-
-            <label class="filter">
-                <input type="checkbox">
-                Key
-            </label>
-
-            <label class="filter">
-                <input type="checkbox">
-                Keyless
-            </label>
-
-        </aside>
-
-        <main>
-
-            <div class="empty" id="emptyState">
-                Search for a Roblox Universe ID.
+            <div class="empty" id="empty">
+                Search for a game ID.
             </div>
 
             <div class="cards">
 
-                <!-- CARD 1 -->
-
-                <div
-                    class="game-card"
-                    id="ringFarmCard"
-                >
+                <div class="card" id="ringFarmCard">
 
                     <img
-                        id="gameThumbnail"
-                        class="banner-img"
-                        src=""
-                        alt="Game Thumbnail"
+                        class="thumbnail"
+                        src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=1200"
+                        alt="Build a Ring Farm"
                     >
 
-                    <div class="info">
+                    <div class="content">
 
                         <div class="title">
                             <h2>Build a Ring Farm</h2>
-                            <div class="verified">✓</div>
+                            <div class="verify">✓</div>
                         </div>
 
                         <div class="stats">
-                            <span>👁 125K Views</span>
-                            <span>❤️ 4.8K Likes</span>
+                            <span>👁 125K</span>
+                            <span>❤️ 4.8K</span>
                         </div>
 
                         <div class="tags">
@@ -419,14 +321,11 @@ body::before{
                             <span class="tag">Keyless</span>
                         </div>
 
-                        <div
-                            class="game-id"
-                            id="gameIdText"
-                        >
-                            Universe ID:
+                        <div class="gameid">
+                            ID: 107646426076756
                         </div>
 
-                        <button class="view-btn">
+                        <button class="btn">
                             View Build
                         </button>
 
@@ -434,11 +333,9 @@ body::before{
 
                 </div>
 
-                <!-- Future cards can go here -->
-
             </div>
 
-        </main>
+        </div>
 
     </div>
 
@@ -448,33 +345,29 @@ body::before{
 
 <script>
 
-/* NAVIGATION */
+/* Tabs */
 
-document
-.querySelectorAll('.nav-btn')
-.forEach(button => {
+document.querySelectorAll('.nav-btn').forEach(btn=>{
 
-    button.addEventListener('click', () => {
+    btn.onclick=()=>{
 
-        document
-        .querySelectorAll('.nav-btn')
-        .forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.nav-btn')
+        .forEach(x=>x.classList.remove('active'));
 
-        document
-        .querySelectorAll('.page')
-        .forEach(page => page.classList.remove('active'));
+        document.querySelectorAll('.page')
+        .forEach(x=>x.classList.remove('active'));
 
-        button.classList.add('active');
+        btn.classList.add('active');
 
         document
-        .getElementById(button.dataset.page)
+        .getElementById(btn.dataset.page)
         .classList.add('active');
 
-    });
+    };
 
 });
 
-/* SEARCH */
+/* Search */
 
 const searchInput =
 document.getElementById('searchInput');
@@ -482,78 +375,28 @@ document.getElementById('searchInput');
 const card =
 document.getElementById('ringFarmCard');
 
-const thumbnail =
-document.getElementById('gameThumbnail');
-
 const empty =
-document.getElementById('emptyState');
+document.getElementById('empty');
 
-const gameIdText =
-document.getElementById('gameIdText');
+searchInput.addEventListener('input',()=>{
 
-searchInput.addEventListener(
-'input',
-async () => {
-
-    const universeId =
+    const value =
     searchInput.value.trim();
 
-    if(universeId === ''){
+    if(value === '107646426076756'){
 
-        card.classList.remove('visible');
-        empty.style.display = 'block';
+        card.classList.add('show');
+        empty.style.display='none';
 
-        return;
-    }
+    }else{
 
-    try{
-
-        const response =
-        await fetch(
-            `https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png&isCircular=false`
-        );
-
-        const data =
-        await response.json();
-
-        if(
-            data.data &&
-            data.data.length > 0 &&
-            data.data[0].imageUrl
-        ){
-
-            thumbnail.src =
-            data.data[0].imageUrl;
-
-            gameIdText.textContent =
-            `Universe ID: ${universeId}`;
-
-            card.classList.add('visible');
-
-            empty.style.display =
-            'none';
-
-        }else{
-
-            card.classList.remove('visible');
-
-            empty.style.display =
-            'block';
-
-        }
-
-    }catch(error){
-
-        console.error(error);
-
-        card.classList.remove('visible');
-
-        empty.style.display =
-        'block';
+        card.classList.remove('show');
+        empty.style.display='block';
 
     }
 
 });
+
 </script>
 
 </body>
