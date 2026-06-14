@@ -1,445 +1,255 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vertex UI | Game Hub</title>
-    <style>
-        /* Reset and Base Styles */
-        * {<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vertex UI</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: sans-serif;
-        }
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            padding: 20px;
-        }
-        header {
-            background-color: #1a1a1a;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #333;
-        }
-        .nav-tabs {
-            display: flex;
-            list-style: none;
-            gap: 20px;
-        }
-        .tab-link {
-            color: #00ff88;
-            text-decoration: none;
-            font-weight: bold;
-            cursor: pointer;
-            padding: 8px 16px;
-            border-radius: 4px;
-            background-color: #222;
-        }
-        .tab-link:hover {
-            background-color: #333;
-        }
-        .content-section {
-            display: none;
-            background-color: #1a1a1a;
-            padding: 30px;
-            border-radius: 8px;
-            border: 1px solid #333;
-        }
-        .content-section.active {
-            display: block;
-        }
-        .card {
-            background: #222;
-            padding: 15px;
-            border-radius: 6px;
-            margin-top: 15px;
-            border-left: 4px solid #00ff88;
-        }
-        h2 {
-            margin-bottom: 10px;
-            color: #00ff88;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Hub</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+    background:#0d1117;
+    color:white;
+}
+
+/* Header */
+header{
+    background:#161b22;
+    padding:18px;
+    border-bottom:1px solid #30363d;
+}
+
+.nav{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+}
+
+.nav button{
+    background:none;
+    border:none;
+    color:#c9d1d9;
+    font-size:16px;
+    cursor:pointer;
+    padding:8px 16px;
+    border-radius:6px;
+    transition:.2s;
+}
+
+.nav button.active,
+.nav button:hover{
+    background:#238636;
+    color:white;
+}
+
+/* Pages */
+.page{
+    display:none;
+    padding:30px;
+}
+
+.page.active{
+    display:block;
+}
+
+/* Browse */
+.search-container{
+    max-width:600px;
+    margin:0 auto 20px;
+}
+
+.search-container input{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#21262d;
+    color:white;
+    font-size:15px;
+}
+
+.filters{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:30px;
+}
+
+.filter-btn{
+    background:#21262d;
+    border:1px solid #30363d;
+    color:white;
+    padding:8px 14px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.filter-btn.active{
+    background:#238636;
+}
+
+/* Cards */
+.games-grid{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.card{
+    width:320px;
+    background:#161b22;
+    border:1px solid #30363d;
+    border-radius:12px;
+    overflow:hidden;
+    display:none;
+}
+
+.card.visible{
+    display:block;
+}
+
+.card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+}
+
+.card-content{
+    padding:16px;
+}
+
+.card h3{
+    margin-bottom:8px;
+}
+
+.tags{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+}
+
+.tag{
+    background:#238636;
+    padding:4px 8px;
+    border-radius:5px;
+    font-size:12px;
+}
+</style>
 </head>
 <body>
 
-    <header>
-        <h1 style="color: #ffffff; margin-bottom: 15px;">Vertex UI</h1>
-        <ul class="nav-tabs">
-            <li><a class="tab-link" onclick="switchTab('home')">Home</a></li>
-            <li><a class="tab-link" onclick="switchTab('browse')">Browse</a></li>
-            <li><a class="tab-link" onclick="switchTab('executors')">Executors</a></li>
-        </ul>
-    </header>
+<header>
+    <div class="nav">
+        <button class="tab active" data-page="home">Home</button>
+        <button class="tab" data-page="browse">Browse</button>
+    </div>
+</header>
 
-    <main>
-        <div id="home" class="content-section active">
-            <h2>Home</h2>
-            <p>Welcome to Vertex UI. Use the tabs above to navigate through the site sections.</p>
-        </div>
+<!-- HOME -->
+<div id="home" class="page active">
+    <h1 style="text-align:center;">Welcome</h1>
+    <p style="text-align:center;margin-top:10px;color:#8b949e;">
+        Discover game builds and scripts.
+    </p>
+</div>
 
-        <div id="browse" class="content-section">
-            <h2>Browse Items</h2>
-            <p>Your games and scripts will appear here.</p>
-            <div class="card">
-                <h3>Sample Item</h3>
-                <p>This is a placeholder description for your contents.</p>
+<!-- BROWSE -->
+<div id="browse" class="page">
+
+    <div class="search-container">
+        <input
+            type="text"
+            id="search"
+            placeholder="Search by game ID..."
+        >
+    </div>
+
+    <div class="filters">
+        <button class="filter-btn">Trusted</button>
+        <button class="filter-btn">Most Viewed</button>
+        <button class="filter-btn">Most Liked</button>
+        <button class="filter-btn">Key</button>
+        <button class="filter-btn">Keyless</button>
+    </div>
+
+    <div class="games-grid">
+
+        <div
+            class="card"
+            id="ringFarmCard"
+            data-id="107646426076756"
+        >
+            <img src="https://via.placeholder.com/320x180?text=Build+a+Ring+Farm">
+
+            <div class="card-content">
+                <h3>Build a Ring Farm</h3>
+
+                <p style="color:#8b949e;">
+                    Game ID: 107646426076756
+                </p>
+
+                <div class="tags">
+                    <span class="tag">Trusted</span>
+                    <span class="tag">Keyless</span>
+                </div>
             </div>
         </div>
 
-        <div id="executors" class="content-section">
-            <h2>Executors</h2>
-            <p>Your tools and utility downloads will appear here.</p>
-            <div class="card">
-                <h3>Sample Tool</h3>
-                <p>This is a placeholder description for your executor utilities.</p>
-            </div>
-        </div>
-    </main>
+    </div>
 
-    <script>
-        function switchTab(sectionId) {
-            // Hide all sections
-            var sections = document.querySelectorAll('.content-section');
-            sections.forEach(function(sec) {
-                sec.classList.remove('active');
-            });
-            
-            // Show the clicked section
-            document.getElementById(sectionId).classList.add('active');
-        }
-    </script>
+</div>
+
+<script>
+
+/* Tabs */
+document.querySelectorAll(".tab").forEach(button => {
+    button.addEventListener("click", () => {
+
+        document.querySelectorAll(".tab")
+            .forEach(btn => btn.classList.remove("active"));
+
+        document.querySelectorAll(".page")
+            .forEach(page => page.classList.remove("active"));
+
+        button.classList.add("active");
+
+        document
+            .getElementById(button.dataset.page)
+            .classList.add("active");
+    });
+});
+
+/* Search */
+const searchInput = document.getElementById("search");
+const card = document.getElementById("ringFarmCard");
+
+searchInput.addEventListener("input", () => {
+
+    const value = searchInput.value.trim();
+
+    if(value === "107646426076756"){
+        card.classList.add("visible");
+    } else {
+        card.classList.remove("visible");
+    }
+});
+
+/* Filter UI Toggle */
+document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        btn.classList.toggle("active");
+    });
+});
+
+</script>
 
 </body>
 </html>
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vertex UI | Game Hub</title>
-    <style>
-        /* Reset and Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            line-height: 1.6;
-        }
-
-        /* Navigation Bar */
-        header {
-            background-color: #1a1a1a;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 2px solid #333;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #00ff88;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .nav-tabs {
-            display: flex;
-            list-style: none;
-            gap: 1rem;
-        }
-
-        .tab-link {
-            color: #aaaaaa;
-            text-decoration: none;
-            font-size: 1.05rem;
-            padding: 0.5rem 1.2rem;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border: 1px solid transparent;
-        }
-
-        .tab-link:hover {
-            color: #ffffff;
-            background-color: #252525;
-        }
-
-        .tab-link.active {
-            color: #121212;
-            background-color: #00ff88;
-            font-weight: bold;
-        }
-
-        /* Content Sections */
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        .content-section {
-            display: none;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Home Section Styling */
-        .hero {
-            text-align: center;
-            padding: 5rem 2rem;
-            background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
-            border: 1px solid #333;
-            border-radius: 12px;
-            margin-bottom: 3rem;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #00ff88;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: #cccccc;
-        }
-
-        /* Search Bar & Filters */
-        .search-container {
-            margin-bottom: 2rem;
-            width: 100%;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            background-color: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 1rem;
-            transition: border-color 0.2s;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            line-height: 1.6;
-        }
-
-        /* Navigation Bar */
-        header {
-            background-color: #1a1a1a;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 2px solid #333;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #00ff88;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .nav-tabs {
-            display: flex;
-            list-style: none;
-            gap: 1rem;
-        }
-
-        .tab-link {
-            color: #aaaaaa;
-            text-decoration: none;
-            font-size: 1.05rem;
-            padding: 0.5rem 1.2rem;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border: 1px solid transparent;
-        }
-
-        .tab-link:hover {
-            color: #ffffff;
-            background-color: #252525;
-        }
-
-        .tab-link.active {
-            color: #121212;
-            background-color: #00ff88;
-            font-weight: bold;
-        }
-
-        /* Content Sections */
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        .content-section {
-            display: none;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Home Section Styling */
-        .hero {
-            text-align: center;
-            padding: 5rem 2rem;
-            background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
-            border: 1px solid #333;
-            border-radius: 12px;
-            margin-bottom: 3rem;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #00ff88;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: #cccccc;
-        }
-
-        /* Search Bar & Filters */
-        .search-container {
-            margin-bottom: 2rem;
-            width: 100%;
-        }
-
-        .search-input {
-            width: 100<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vertex UI</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
-        body { background-color: #121212; color: #ffffff; padding: 20px; }
-        header { background-color: #1a1a1a; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-        .nav-tabs { display: flex; list-style: none; gap: 20px; }
-        .tab-link { color: #00ff88; text-decoration: none; font-weight: bold; cursor: pointer; padding: 5px 10px; }
-        .tab-link:hover { background-color: #333; border-radius: 4px; }
-        .content-section { display: none; background-color: #1a1a1a; padding: 30px; border-radius: 8px; margin-top: 20px; }
-        .active { display: block; }
-        .card { background: #222; padding: 15px; border-radius: 6px; margin-top: 15px; border-left: 4px solid #00ff88; }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1 style="color: #00ff88; margin-bottom: 10px;">Vertex UI</h1>
-        <ul class="nav-tabs">
-            <li><a class="tab-link" onclick="switchTab('home')">Home</a></li>
-            <li><a class="tab-link" onclick="switchTab('browse')">Browse</a></li>
-            <li><a class="tab-link" onclick="switchTab('executors')">Executors</a></li>
-        </ul>
-    </header>
-
-    <main>
-        <div id="home" class="content-section active">
-            <h2>Welcome to Home</h2>
-            <p>Select a tab above to start browsing.</p>
-        </div>
-
-        <div id="browse" class="content-section">
-            <h2>Browse Content</h2>
-            <div class="card">
-                <h3>Item #1</h3>
-                <p>This is a placeholder for your first game or script.</p>
-            </div>
-        </div>
-
-        <div id="executors" class="content-section">
-            <h2>Executors</h2>
-            <div class="card">
-                <h3>Executor #1</h3>
-                <p>This is a placeholder for your tools or software links.</p>
-            </div>
-        </div>
-    </main>
-
-    <script>
-        function switchTab(sectionId) {
-            // Hide all sections
-            var sections = document.querySelectorAll('.content-section');
-            sections.forEach(function(sec) {
-                sec.classList.remove('active');
-            });
-            // Show the clicked section
-            document.getElementById(sectionId).classList.add('active');
-        }
-    </script>
-
-</body>
-</html>
-            padding: 1rem 1.5rem;
-            background-color: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 1rem;
-            transition: border-color 0.2s;
