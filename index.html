@@ -1,403 +1,379 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --container-bg: #161b22;
+            --border-color: #30363d;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent-blue: #58a6ff;
+            --nav-active: #f0f6fc;
+        }
 
-<title>GameHub</title>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        /* Top Navigation Bar */
+        header {
+            background-color: var(--container-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: relative;
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+        .logo {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-main);
+        }
 
-body{
-    font-family:Inter,sans-serif;
-    background:#0b1120;
-    color:white;
-    min-height:100vh;
-}
+        /* Top Middle Tabs */
+        .tabs {
+            display: flex;
+            gap: 24px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
 
-body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    background:
-    radial-gradient(circle at top left,#2563eb33,transparent 35%),
-    radial-gradient(circle at bottom right,#7c3aed33,transparent 35%);
-    z-index:-1;
-}
+        .tab {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 20px 0;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+        }
 
-.navbar{
-    display:flex;
-    justify-content:center;
-    padding:18px;
-    backdrop-filter:blur(20px);
-    background:rgba(0,0,0,.25);
-    border-bottom:1px solid rgba(255,255,255,.08);
-}
+        .tab:hover {
+            color: var(--text-main);
+        }
 
-.nav-links{
-    display:flex;
-    gap:15px;
-}
+        .tab.active {
+            color: var(--nav-active);
+            border-bottom-color: #f78166; /* GitHub style active line */
+        }
 
-.nav-btn{
-    border:none;
-    background:transparent;
-    color:#94a3b8;
-    padding:10px 22px;
-    border-radius:12px;
-    cursor:pointer;
-    font-weight:600;
-}
+        /* Main Content Layout */
+        .container {
+            max-width: 1200px;
+            margin: 32px auto;
+            padding: 0 16px;
+        }
 
-.nav-btn.active{
-    background:#2563eb;
-    color:white;
-}
+        .page-content {
+            display: none;
+        }
 
-.page{
-    display:none;
-}
+        .page-content.active {
+            display: block;
+        }
 
-.page.active{
-    display:block;
-}
+        /* Browse Page Grid Layout */
+        .browse-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 32px;
+        }
 
-.hero{
-    text-align:center;
-    padding:120px 20px;
-}
+        /* Sidebar Filters */
+        .sidebar h3 {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-.hero h1{
-    font-size:4rem;
-    margin-bottom:15px;
-}
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-.hero p{
-    color:#94a3b8;
-}
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-main);
+            cursor: pointer;
+        }
 
-.browse{
-    max-width:1500px;
-    margin:auto;
-    padding:30px;
-}
+        .filter-item input {
+            cursor: pointer;
+            accent-color: var(--accent-blue);
+        }
 
-.search{
-    max-width:700px;
-    margin:0 auto 25px;
-}
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 24px;
+        }
 
-.search input{
-    width:100%;
-    padding:18px;
-    border:none;
-    border-radius:16px;
-    background:rgba(255,255,255,.06);
-    color:white;
-    outline:none;
-}
+        .search-bar {
+            width: 100%;
+            max-width: 400px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--text-main);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
 
-.layout{
-    display:grid;
-    grid-template-columns:250px 1fr;
-    gap:25px;
-}
+        .search-bar:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+        }
 
-.sidebar{
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:20px;
-    padding:20px;
-    height:fit-content;
-}
+        /* Game Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
 
-.sidebar h3{
-    margin-bottom:15px;
-}
+        .card {
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
 
-.sidebar label{
-    display:block;
-    margin-bottom:12px;
-    color:#cbd5e1;
-}
+        .card-header-area {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
 
-.cards{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:24px;
-}
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            background-color: #21262d;
+            border: 1px solid var(--border-color);
+            object-fit: cover;
+        }
 
-.card{
-    display:none;
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:20px;
-    overflow:hidden;
-    transition:.25s;
-}
+        .card-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
 
-.card.show{
-    display:block;
-}
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin: 0;
+        }
 
-.card:hover{
-    transform:translateY(-5px);
-}
+        .card-id {
+            font-family: monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            background: #21262d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            width: fit-content;
+        }
 
-.thumbnail{
-    width:100%;
-    height:220px;
-    object-fit:cover;
-}
+        .card-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.4;
+        }
 
-.content{
-    padding:18px;
-}
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: auto;
+        }
 
-.title{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-bottom:10px;
-}
+        .tag {
+            font-size: 12px;
+            background-color: #21262d;
+            border: 1px solid var(--border-color);
+            padding: 2px 8px;
+            border-radius: 2em;
+            color: var(--text-main);
+        }
 
-.verify{
-    width:22px;
-    height:22px;
-    background:#22c55e;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:12px;
-    font-weight:bold;
-}
-
-.stats{
-    display:flex;
-    gap:15px;
-    color:#94a3b8;
-    margin-bottom:12px;
-    font-size:14px;
-}
-
-.tags{
-    display:flex;
-    gap:8px;
-    margin-bottom:15px;
-}
-
-.tag{
-    background:#2563eb;
-    padding:5px 10px;
-    border-radius:999px;
-    font-size:12px;
-}
-
-.gameid{
-    color:#94a3b8;
-    margin-bottom:15px;
-    font-size:14px;
-}
-
-.btn{
-    width:100%;
-    border:none;
-    background:#2563eb;
-    color:white;
-    padding:12px;
-    border-radius:12px;
-    cursor:pointer;
-    font-weight:600;
-}
-
-.empty{
-    text-align:center;
-    color:#94a3b8;
-    padding:100px 20px;
-}
-
-@media(max-width:1200px){
-    .cards{
-        grid-template-columns:repeat(2,1fr);
-    }
-}
-
-@media(max-width:900px){
-
-    .layout{
-        grid-template-columns:1fr;
-    }
-
-    .hero h1{
-        font-size:2.5rem;
-    }
-}
-
-@media(max-width:700px){
-    .cards{
-        grid-template-columns:1fr;
-    }
-}
-</style>
+        .no-results {
+            color: var(--text-muted);
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            border: 1px dashed var(--border-color);
+            border-radius: 6px;
+        }
+    </style>
 </head>
 <body>
 
-<nav class="navbar">
-    <div class="nav-links">
-        <button class="nav-btn active" data-page="home">Home</button>
-        <button class="nav-btn" data-page="browse">Browse</button>
-    </div>
-</nav>
-
-<section id="home" class="page active">
-    <div class="hero">
-        <h1>Discover Game Builds</h1>
-        <p>Search trusted game builds and resources.</p>
-    </div>
-</section>
-
-<section id="browse" class="page">
-
-<div class="browse">
-
-    <div class="search">
-        <input
-            id="searchInput"
-            type="text"
-            placeholder="Search by ID..."
-        >
-    </div>
-
-    <div class="layout">
-
-        <div class="sidebar">
-            <h3>Filters</h3>
-
-            <label><input type="checkbox"> Trusted</label>
-            <label><input type="checkbox"> Most Viewed</label>
-            <label><input type="checkbox"> Most Liked</label>
-            <label><input type="checkbox"> Key</label>
-            <label><input type="checkbox"> Keyless</label>
+    <header>
+        <div class="logo">GitHubHub</div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab(event, 'home')">Home</div>
+            <div class="tab" onclick="switchTab(event, 'browse')">Browse</div>
         </div>
 
-        <div>
+        <div style="width: 60px;"></div>
+    </header>
 
-            <div class="empty" id="empty">
-                Search for a game ID.
-            </div>
+    <div class="container">
+        
+        <div id="home-page" class="page-content active">
+            <h2>Welcome Home</h2>
+            <p style="color: var(--text-muted);">Select the "Browse" tab above to explore active game builds and systems.</p>
+        </div>
 
-            <div class="cards">
+        <div id="browse-page" class="page-content">
+            <div class="browse-layout">
+                
+                <aside class="sidebar">
+                    <h3>Filters</h3>
+                    <div class="filter-group">
+                        <label class="filter-item"><input type="checkbox" checked> Trusted</label>
+                        <label class="filter-item"><input type="checkbox" checked> Most Viewed</label>
+                        <label class="filter-item"><input type="checkbox" checked> Most Liked</label>
+                        <label class="filter-item"><input type="checkbox" checked> Key</label>
+                        <label class="filter-item"><input type="checkbox" checked> Keyless</label>
+                    </div>
+                </aside>
 
-                <div class="card" id="ringFarmCard">
-
-                    <img
-                        class="thumbnail"
-                        src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=1200"
-                        alt="Build a Ring Farm"
-                    >
-
-                    <div class="content">
-
-                        <div class="title">
-                            <h2>Build a Ring Farm</h2>
-                            <div class="verify">✓</div>
-                        </div>
-
-                        <div class="stats">
-                            <span>👁 125K</span>
-                            <span>❤️ 4.8K</span>
-                        </div>
-
-                        <div class="tags">
-                            <span class="tag">Trusted</span>
-                            <span class="tag">Keyless</span>
-                        </div>
-
-                        <div class="gameid">
-                            ID: 107646426076756
-                        </div>
-
-                        <button class="btn">
-                            View Build
-                        </button>
-
+                <main>
+                    <div class="search-container">
+                        <input type="text" id="search-bar" class="search-bar" placeholder="Search by name or ID (e.g., 107646426076756)..." oninput="filterCards()">
                     </div>
 
-                </div>
+                    <div class="cards-grid" id="cards-container">
+                        <div class="card" data-id="107646426076756" data-title="build a ring farm">
+                            <div class="card-header-area">
+                                <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                                <div class="card-title-group">
+                                    <h4 class="card-title">Build a Ring Farm</h4>
+                                    <span class="card-id">ID: 107646426076756</span>
+                                </div>
+                            </div>
+                            <p class="card-desc">An automated build framework designed for efficient ring cultivation farming systems.</p>
+                            <div class="card-tags">
+                                <span class="tag">Trusted</span>
+                                <span class="tag">Keyless</span>
+                            </div>
+                        </div>
+                    </div>
+                </main>
 
             </div>
-
         </div>
 
     </div>
 
-</div>
+    <script>
+        // Tab switching logic
+        function switchTab(event, tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
 
-</section>
+            document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
+            document.getElementById(`${tabName}-page`).classList.add('active');
+        }
 
-<script>
+        // Live Search Filter & API Handler
+        async function filterCards() {
+            const query = document.getElementById('search-bar').value.trim().toLowerCase();
+            const cards = document.querySelectorAll('.card');
+            const container = document.getElementById('cards-container');
+            
+            const existingNoResults = document.querySelector('.no-results');
+            if (existingNoResults) existingNoResults.remove();
 
-/* Tabs */
+            let visibleCount = 0;
 
-document.querySelectorAll('.nav-btn').forEach(btn=>{
+            for (let card of cards) {
+                const id = card.getAttribute('data-id');
+                const title = card.getAttribute('data-title').toLowerCase();
 
-    btn.onclick=()=>{
+                if (title.includes(query) || id.includes(query)) {
+                    card.style.display = 'flex';
+                    visibleCount++;
 
-        document.querySelectorAll('.nav-btn')
-        .forEach(x=>x.classList.remove('active'));
+                    // Fire Roblox live thumbnail fetch if exact ID is provided
+                    if (query === id) {
+                        await fetchGameThumbnail(id, card);
+                    }
+                } else {
+                    card.style.display = 'none';
+                }
+            }
 
-        document.querySelectorAll('.page')
-        .forEach(x=>x.classList.remove('active'));
+            if (visibleCount === 0) {
+                const noResultsDiv = document.createElement('div');
+                noResultsDiv.className = 'no-results';
+                noResultsDiv.innerText = 'No item found matching that name or ID.';
+                container.appendChild(noResultsDiv);
+            }
+        }
 
-        btn.classList.add('active');
+        // Async dynamic Roblox asset fetcher via CORS proxy
+        async function fetchGameThumbnail(placeId, cardElement) {
+            try {
+                // Phase 1: Translate Place ID to internal Roblox Universe ID
+                const universeRes = await fetch(`https://corsproxy.io/?https://apis.roblox.com/universes/v1/places/${placeId}/universe`);
+                const universeData = await universeRes.json();
+                const universeId = universeData.universeId;
 
-        document
-        .getElementById(btn.dataset.page)
-        .classList.add('active');
-
-    };
-
-});
-
-/* Search */
-
-const searchInput =
-document.getElementById('searchInput');
-
-const card =
-document.getElementById('ringFarmCard');
-
-const empty =
-document.getElementById('empty');
-
-searchInput.addEventListener('input',()=>{
-
-    const value =
-    searchInput.value.trim();
-
-    if(value === '107646426076756'){
-
-        card.classList.add('show');
-        empty.style.display='none';
-
-    }else{
-
-        card.classList.remove('show');
-        empty.style.display='block';
-
-    }
-
-});
-
-</script>
-
+                if (universeId) {
+                    // Phase 2: Query Thumbnails API using compiled Universe ID
+                    const thumbRes = await fetch(`https://corsproxy.io/?https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=150x150&format=Png&isCircular=false`);
+                    const thumbData = await thumbRes.json();
+                    
+                    if (thumbData.data && thumbData.data[0]) {
+                        const imageUrl = thumbData.data[0].imageUrl;
+                        
+                        // Phase 3: Update DOM structure replacing default vector graphic with source image
+                        let iconPlaceholder = cardElement.querySelector('.card-icon');
+                        if (iconPlaceholder) {
+                            if (iconPlaceholder.tagName.toLowerCase() === 'svg') {
+                                const newImg = document.createElement('img');
+                                newImg.className = 'card-icon';
+                                newImg.src = imageUrl;
+                                iconPlaceholder.parentNode.replaceChild(newImg, iconPlaceholder);
+                            } else {
+                                iconPlaceholder.src = imageUrl;
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Roblox API fetch routine interrupted:", error);
+            }
+        }
+    </script>
 </body>
 </html>
