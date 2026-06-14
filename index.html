@@ -3,130 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ringtone Hub</title>
+    <title>Game Hub</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 10px; border: none; background: #ddd; cursor: pointer; font-weight: bold; border-radius: 4px; }
-        .tab-btn.active { background: #007bff; color: white; }
-        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
-        .form-group input { padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; }
-        .btn { padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        .ringtone-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
-        .controls { display: flex; gap: 10px; align-items: center; }
-        .like-btn { background: none; border: none; cursor: pointer; font-size: 18px; }
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* Navigation Bar */
+        header {
+            background-color: #1a1a1a;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid #333;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ff88;
+            text-decoration: none;
+        }
+
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        .tab-link {
+            color: #aaaaaa;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tab-link:hover, .tab-link.active {
+            color: #ffffff;
+            background-color: #333333;
+        }
+
+        .tab-link.active {
+            border-bottom: 2px solid #00ff88;
+            border-radius: 4px 4px 0 0;
+        }
+
+        /* Content Sections */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .content-section {
+            display: none; /* Hidden by default */
+        }
+
+        .content-section.active {
+            display: block; /* Show active section */
+        }
+
+        /* Hero / Home Styling */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #00ff88;
+        }
+
+        /* Grid Layout for Browse/Executors */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #00ff88;
+        }
+
+        .card h3 {
+            margin-bottom: 0.5rem;
+            color: #00ff88;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #00ff88;
+            color: #121212;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-top: 1rem;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #00cc6a;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>🎵 Ringtone Hub</h2>
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">GameSpace</a>
+            <ul class="nav-tabs">
+                <li><a class="tab-link active" onclick="switchTab(event, 'home')">Home</a></li>
+                <li><a class="tab-link" onclick="switchTab(event, 'browse')">Browse</a></li>
+                <li><a class="tab-link" onclick="switchTab(event, 'executors')">Executors</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <div style="margin-bottom: 30px; padding: 15px; background: #eef2f7; border-radius: 6px;">
-        <h3>Add New Ringtone</h3>
-        <div class="form-group">
-            <label>Ringtone Name</label>
-            <input type="text" id="ringtoneTitle" placeholder="e.g., Cool Retro Synth">
-        </div>
-        <div class="form-group">
-            <label>Audio URL (MP3/MP4 or File.io link)</label>
-            <input type="text" id="ringtoneUrl" placeholder="https://example.com/audio.mp3">
-        </div>
-        <button class="btn" onclick="addRingtone()">Upload to Database</button>
-    </div>
+    <main class="container">
 
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('all')">All</button>
-        <button class="tab-btn" onclick="switchTab('recent')">Recent</button>
-        <button class="tab-btn" onclick="switchTab('liked')">Most Liked</button>
-    </div>
+        <section id="home" class="content-section active">
+            <div class="hero">
+                <h1>Welcome to GameSpace</h1>
+                <p>Your ultimate hub for browsing games, tools, and scripts.</p>
+            </div>
+            <h2>Featured Content</h2>
+            <p>Check out the tabs above to explore our library of games and available executors.</p>
+        </section>
 
-    <audio id="audioPlayer" style="width: 100%; margin-bottom: 15px;" controls></audio>
-
-    <div id="ringtoneList"></div>
-</div>
-
-<script>
-    let allRingtones = [];
-    let currentView = 'all';
-
-    async function fetchRingtones() {
-        const res = await fetch('/api/ringtones');
-        allRingtones = await res.json();
-        renderRingtones();
-    }
-
-    function renderRingtones() {
-        const listDiv = document.getElementById('ringtoneList');
-        listDiv.innerHTML = '';
-
-        let filtered = [...allRingtones];
-
-        // Apply Tab Filters
-        if (currentView === 'recent') {
-            filtered.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
-        } else if (currentView === 'liked') {
-            filtered.sort((a, b) => b.likes - a.likes);
-        }
-
-        filtered.forEach(rt => {
-            const item = document.createElement('div');
-            item.className = 'ringtone-item';
-            item.innerHTML = `
-                <div>
-                    <strong>${rt.title}</strong>
-                    <div style="font-size: 12px; color: #777;">Likes: ${rt.likes}</div>
+        <section id="browse" class="content-section">
+            <h2>Browse Games</h2>
+            <p>Explore available titles and projects below.</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3>Game Title One</h3>
+                    <p>A short description of the game, features, or gameplay elements goes right here.</p>
+                    <a href="#" class="btn">Play Now</a>
                 </div>
-                <div class="controls">
-                    <button class="tab-btn" onclick="playAudio('${rt.url}')">▶ Play</button>
-                    <button class="like-btn" onclick="likeRingtone(${rt.id})">❤️</button>
+                <div class="card">
+                    <h3>Game Title Two</h3>
+                    <p>A short description of the game, features, or gameplay elements goes right here.</p>
+                    <a href="#" class="btn">Play Now</a>
                 </div>
-            `;
-            listDiv.appendChild(item);
-        });
-    }
+                <div class="card">
+                    <h3>Game Title Three</h3>
+                    <p>A short description of the game, features, or gameplay elements goes right here.</p>
+                    <a href="#" class="btn">Play Now</a>
+                </div>
+            </div>
+        </section>
 
-    function playAudio(url) {
-        const player = document.getElementById('audioPlayer');
-        player.src = url;
-        player.play();
-    }
+        <section id="executors" class="content-section">
+            <h2>Executors & Tools</h2>
+            <p>Find the latest compatible tools and utilities here.</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3>Tool/Executor Alpha</h3>
+                    <p>Version: 1.0.2<br>Status: <span style="color: #00ff88;">Updated</span></p>
+                    <p>Details regarding compatibility and features.</p>
+                    <a href="#" class="btn">Download</a>
+                </div>
+                <div class="card">
+                    <h3>Tool/Executor Beta</h3>
+                    <p>Version: 2.1.0<br>Status: <span style="color: #00ff88;">Updated</span></p>
+                    <p>Details regarding compatibility and features.</p>
+                    <a href="#" class="btn">Download</a>
+                </div>
+            </div>
+        </section>
 
-    async function addRingtone() {
-        const title = document.getElementById('ringtoneTitle').value;
-        const url = document.getElementById('ringtoneUrl').value;
+    </main>
 
-        const res = await fetch('/api/ringtones', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, url })
-        });
+    <script>
+        function switchTab(event, sectionId) {
+            // Prevent default anchor behavior
+            event.preventDefault();
 
-        if (res.ok) {
-            document.getElementById('ringtoneTitle').value = '';
-            document.getElementById('ringtoneUrl').value = '';
-            fetchRingtones();
-        } else {
-            const err = await res.json();
-            alert(err.error);
+            // Hide all content sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all tab links
+            const tabs = document.querySelectorAll('.tab-link');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show the selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Add active class to the clicked tab
+            event.currentTarget.classList.add('active');
         }
-    }
+    </script>
 
-    async function likeRingtone(id) {
-        await fetch(`/api/ringtones/${id}/like`, { method: 'POST' });
-        fetchRingtones();
-    }
-
-    function switchTab(tab) {
-        currentView = tab;
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-        renderRingtones();
-    }
-
-    // Initial load
-    fetchRingtones();
-</script>
 </body>
 </html>
