@@ -6,7 +6,122 @@
     <title>Vertex UI | Game Hub</title>
     <style>
         /* Reset and Base Styles */
+        * {<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertex UI</title>
+    <style>
         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            padding: 20px;
+        }
+        header {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        .tab-link {
+            color: #00ff88;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 4px;
+            background-color: #222;
+        }
+        .tab-link:hover {
+            background-color: #333;
+        }
+        .content-section {
+            display: none;
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .card {
+            background: #222;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            border-left: 4px solid #00ff88;
+        }
+        h2 {
+            margin-bottom: 10px;
+            color: #00ff88;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 style="color: #ffffff; margin-bottom: 15px;">Vertex UI</h1>
+        <ul class="nav-tabs">
+            <li><a class="tab-link" onclick="switchTab('home')">Home</a></li>
+            <li><a class="tab-link" onclick="switchTab('browse')">Browse</a></li>
+            <li><a class="tab-link" onclick="switchTab('executors')">Executors</a></li>
+        </ul>
+    </header>
+
+    <main>
+        <div id="home" class="content-section active">
+            <h2>Home</h2>
+            <p>Welcome to Vertex UI. Use the tabs above to navigate through the site sections.</p>
+        </div>
+
+        <div id="browse" class="content-section">
+            <h2>Browse Items</h2>
+            <p>Your games and scripts will appear here.</p>
+            <div class="card">
+                <h3>Sample Item</h3>
+                <p>This is a placeholder description for your contents.</p>
+            </div>
+        </div>
+
+        <div id="executors" class="content-section">
+            <h2>Executors</h2>
+            <p>Your tools and utility downloads will appear here.</p>
+            <div class="card">
+                <h3>Sample Tool</h3>
+                <p>This is a placeholder description for your executor utilities.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function switchTab(sectionId) {
+            // Hide all sections
+            var sections = document.querySelectorAll('.content-section');
+            sections.forEach(function(sec) {
+                sec.classList.remove('active');
+            });
+            
+            // Show the clicked section
+            document.getElementById(sectionId).classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
             margin: 0;
             padding: 0;
             box-sizing: border-box;<!DOCTYPE html>
