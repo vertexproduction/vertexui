@@ -255,7 +255,72 @@
         }
 
         .search-input {
-            width: 100%;
+            width: 100<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertex UI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+        body { background-color: #121212; color: #ffffff; padding: 20px; }
+        header { background-color: #1a1a1a; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .nav-tabs { display: flex; list-style: none; gap: 20px; }
+        .tab-link { color: #00ff88; text-decoration: none; font-weight: bold; cursor: pointer; padding: 5px 10px; }
+        .tab-link:hover { background-color: #333; border-radius: 4px; }
+        .content-section { display: none; background-color: #1a1a1a; padding: 30px; border-radius: 8px; margin-top: 20px; }
+        .active { display: block; }
+        .card { background: #222; padding: 15px; border-radius: 6px; margin-top: 15px; border-left: 4px solid #00ff88; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 style="color: #00ff88; margin-bottom: 10px;">Vertex UI</h1>
+        <ul class="nav-tabs">
+            <li><a class="tab-link" onclick="switchTab('home')">Home</a></li>
+            <li><a class="tab-link" onclick="switchTab('browse')">Browse</a></li>
+            <li><a class="tab-link" onclick="switchTab('executors')">Executors</a></li>
+        </ul>
+    </header>
+
+    <main>
+        <div id="home" class="content-section active">
+            <h2>Welcome to Home</h2>
+            <p>Select a tab above to start browsing.</p>
+        </div>
+
+        <div id="browse" class="content-section">
+            <h2>Browse Content</h2>
+            <div class="card">
+                <h3>Item #1</h3>
+                <p>This is a placeholder for your first game or script.</p>
+            </div>
+        </div>
+
+        <div id="executors" class="content-section">
+            <h2>Executors</h2>
+            <div class="card">
+                <h3>Executor #1</h3>
+                <p>This is a placeholder for your tools or software links.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function switchTab(sectionId) {
+            // Hide all sections
+            var sections = document.querySelectorAll('.content-section');
+            sections.forEach(function(sec) {
+                sec.classList.remove('active');
+            });
+            // Show the clicked section
+            document.getElementById(sectionId).classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
             padding: 1rem 1.5rem;
             background-color: #1a1a1a;
             border: 1px solid #333;
