@@ -3,250 +3,446 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Game Hub</title>
+
+<title>GameHub</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
 }
 
 body{
-    background:#0d1117;
+    font-family:'Inter',sans-serif;
+    background:#0b1120;
     color:white;
+    min-height:100vh;
+    overflow-x:hidden;
 }
 
-/* Header */
-header{
-    background:#161b22;
-    padding:18px;
-    border-bottom:1px solid #30363d;
+/* Background */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+        radial-gradient(circle at top left,#3b82f650,transparent 35%),
+        radial-gradient(circle at bottom right,#8b5cf650,transparent 35%);
+    z-index:-1;
 }
 
-.nav{
+/* Navbar */
+.navbar{
     display:flex;
     justify-content:center;
-    gap:40px;
+    align-items:center;
+    padding:22px;
+    position:sticky;
+    top:0;
+    backdrop-filter:blur(20px);
+    background:rgba(10,15,30,.7);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    z-index:100;
 }
 
-.nav button{
-    background:none;
+.nav-links{
+    display:flex;
+    gap:18px;
+}
+
+.nav-btn{
     border:none;
-    color:#c9d1d9;
-    font-size:16px;
+    background:transparent;
+    color:#94a3b8;
+    font-size:15px;
+    font-weight:600;
     cursor:pointer;
-    padding:8px 16px;
-    border-radius:6px;
-    transition:.2s;
+    padding:10px 20px;
+    border-radius:12px;
+    transition:.25s;
 }
 
-.nav button.active,
-.nav button:hover{
-    background:#238636;
+.nav-btn:hover,
+.nav-btn.active{
     color:white;
+    background:#2563eb;
 }
 
 /* Pages */
 .page{
     display:none;
-    padding:30px;
 }
 
 .page.active{
     display:block;
 }
 
+/* Hero */
+.hero{
+    max-width:1200px;
+    margin:auto;
+    padding:120px 30px;
+    text-align:center;
+}
+
+.hero h1{
+    font-size:4rem;
+    font-weight:800;
+    margin-bottom:15px;
+}
+
+.hero p{
+    color:#94a3b8;
+    font-size:1.1rem;
+}
+
 /* Browse */
-.search-container{
-    max-width:600px;
-    margin:0 auto 20px;
+.browse-wrapper{
+    max-width:1300px;
+    margin:auto;
+    padding:40px 25px;
 }
 
-.search-container input{
+/* Search */
+.search-box{
+    max-width:700px;
+    margin:0 auto 30px;
+}
+
+.search-box input{
     width:100%;
-    padding:12px;
+    padding:18px;
+    border-radius:18px;
     border:none;
-    border-radius:8px;
-    background:#21262d;
-    color:white;
+    outline:none;
     font-size:15px;
-}
-
-.filters{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-bottom:30px;
-}
-
-.filter-btn{
-    background:#21262d;
-    border:1px solid #30363d;
+    background:rgba(255,255,255,.05);
     color:white;
-    padding:8px 14px;
-    border-radius:6px;
-    cursor:pointer;
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.08);
 }
 
-.filter-btn.active{
-    background:#238636;
+/* Layout */
+.content{
+    display:grid;
+    grid-template-columns:260px 1fr;
+    gap:25px;
+}
+
+/* Sidebar */
+.sidebar{
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    backdrop-filter:blur(20px);
+    border-radius:24px;
+    padding:25px;
+    height:fit-content;
+}
+
+.sidebar h3{
+    margin-bottom:18px;
+}
+
+.filter{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:12px;
+}
+
+.filter input{
+    width:18px;
+    height:18px;
 }
 
 /* Cards */
-.games-grid{
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:20px;
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+    gap:25px;
 }
 
-.card{
-    width:320px;
-    background:#161b22;
-    border:1px solid #30363d;
-    border-radius:12px;
-    overflow:hidden;
+.game-card{
     display:none;
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:24px;
+    overflow:hidden;
+    transition:.3s;
 }
 
-.card.visible{
+.game-card.visible{
     display:block;
 }
 
-.card img{
-    width:100%;
+.game-card:hover{
+    transform:translateY(-6px);
+}
+
+.banner{
     height:180px;
-    object-fit:cover;
+    background:
+    linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+    );
 }
 
-.card-content{
-    padding:16px;
+.info{
+    padding:22px;
 }
 
-.card h3{
-    margin-bottom:8px;
+.title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.verified{
+    background:#22c55e;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.stats{
+    display:flex;
+    gap:18px;
+    color:#94a3b8;
+    margin-bottom:18px;
 }
 
 .tags{
     display:flex;
     gap:8px;
-    margin-top:12px;
+    margin-bottom:20px;
 }
 
 .tag{
-    background:#238636;
-    padding:4px 8px;
-    border-radius:5px;
+    background:#1e40af;
+    padding:6px 12px;
+    border-radius:999px;
     font-size:12px;
+}
+
+.view-btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:14px;
+    background:#2563eb;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.view-btn:hover{
+    background:#1d4ed8;
+}
+
+/* Empty state */
+.empty{
+    text-align:center;
+    color:#94a3b8;
+    padding:60px;
+}
+
+@media(max-width:900px){
+
+.content{
+    grid-template-columns:1fr;
+}
+
+.hero h1{
+    font-size:2.6rem;
+}
 }
 </style>
 </head>
 <body>
 
-<header>
-    <div class="nav">
-        <button class="tab active" data-page="home">Home</button>
-        <button class="tab" data-page="browse">Browse</button>
+<nav class="navbar">
+    <div class="nav-links">
+        <button class="nav-btn active" data-page="home">Home</button>
+        <button class="nav-btn" data-page="browse">Browse</button>
     </div>
-</header>
+</nav>
 
 <!-- HOME -->
-<div id="home" class="page active">
-    <h1 style="text-align:center;">Welcome</h1>
-    <p style="text-align:center;margin-top:10px;color:#8b949e;">
-        Discover game builds and scripts.
-    </p>
-</div>
+<section id="home" class="page active">
+
+    <div class="hero">
+        <h1>Discover Premium Game Builds</h1>
+        <p>
+            Browse trusted builds, popular releases,
+            and community favorites.
+        </p>
+    </div>
+
+</section>
 
 <!-- BROWSE -->
-<div id="browse" class="page">
+<section id="browse" class="page">
 
-    <div class="search-container">
+<div class="browse-wrapper">
+
+    <div class="search-box">
         <input
             type="text"
-            id="search"
-            placeholder="Search by game ID..."
+            id="searchInput"
+            placeholder="Search by Game ID..."
         >
     </div>
 
-    <div class="filters">
-        <button class="filter-btn">Trusted</button>
-        <button class="filter-btn">Most Viewed</button>
-        <button class="filter-btn">Most Liked</button>
-        <button class="filter-btn">Key</button>
-        <button class="filter-btn">Keyless</button>
-    </div>
+    <div class="content">
 
-    <div class="games-grid">
+        <aside class="sidebar">
+            <h3>Filters</h3>
 
-        <div
-            class="card"
-            id="ringFarmCard"
-            data-id="107646426076756"
-        >
-            <img src="https://via.placeholder.com/320x180?text=Build+a+Ring+Farm">
+            <label class="filter">
+                <input type="checkbox">
+                Trusted
+            </label>
 
-            <div class="card-content">
-                <h3>Build a Ring Farm</h3>
+            <label class="filter">
+                <input type="checkbox">
+                Most Viewed
+            </label>
 
-                <p style="color:#8b949e;">
-                    Game ID: 107646426076756
-                </p>
+            <label class="filter">
+                <input type="checkbox">
+                Most Liked
+            </label>
 
-                <div class="tags">
-                    <span class="tag">Trusted</span>
-                    <span class="tag">Keyless</span>
-                </div>
+            <label class="filter">
+                <input type="checkbox">
+                Key
+            </label>
+
+            <label class="filter">
+                <input type="checkbox">
+                Keyless
+            </label>
+        </aside>
+
+        <div>
+
+            <div id="emptyState" class="empty">
+                Search for a Game ID to begin.
             </div>
+
+            <div class="cards">
+
+                <div
+                    class="game-card"
+                    id="ringFarmCard"
+                    data-id="107646426076756"
+                >
+
+                    <div class="banner"></div>
+
+                    <div class="info">
+
+                        <div class="title">
+                            <h2>Build a Ring Farm</h2>
+                            <div class="verified">✓</div>
+                        </div>
+
+                        <div class="stats">
+                            <span>👁 125K Views</span>
+                            <span>❤️ 4.8K Likes</span>
+                        </div>
+
+                        <div class="tags">
+                            <span class="tag">Trusted</span>
+                            <span class="tag">Keyless</span>
+                        </div>
+
+                        <p style="color:#94a3b8;margin-bottom:18px;">
+                            Game ID:
+                            107646426076756
+                        </p>
+
+                        <button class="view-btn">
+                            View Build
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
 
     </div>
 
 </div>
 
+</section>
+
 <script>
 
-/* Tabs */
-document.querySelectorAll(".tab").forEach(button => {
-    button.addEventListener("click", () => {
+/* Navigation */
+document.querySelectorAll('.nav-btn').forEach(btn=>{
 
-        document.querySelectorAll(".tab")
-            .forEach(btn => btn.classList.remove("active"));
+    btn.addEventListener('click',()=>{
 
-        document.querySelectorAll(".page")
-            .forEach(page => page.classList.remove("active"));
+        document.querySelectorAll('.nav-btn')
+        .forEach(b=>b.classList.remove('active'));
 
-        button.classList.add("active");
+        document.querySelectorAll('.page')
+        .forEach(p=>p.classList.remove('active'));
+
+        btn.classList.add('active');
 
         document
-            .getElementById(button.dataset.page)
-            .classList.add("active");
+        .getElementById(btn.dataset.page)
+        .classList.add('active');
+
     });
+
 });
 
 /* Search */
-const searchInput = document.getElementById("search");
-const card = document.getElementById("ringFarmCard");
+const searchInput =
+document.getElementById('searchInput');
 
-searchInput.addEventListener("input", () => {
+const card =
+document.getElementById('ringFarmCard');
 
-    const value = searchInput.value.trim();
+const empty =
+document.getElementById('emptyState');
 
-    if(value === "107646426076756"){
-        card.classList.add("visible");
-    } else {
-        card.classList.remove("visible");
+searchInput.addEventListener('input',()=>{
+
+    const value =
+    searchInput.value.trim();
+
+    if(value === '107646426076756'){
+
+        card.classList.add('visible');
+        empty.style.display='none';
+
+    }else{
+
+        card.classList.remove('visible');
+        empty.style.display='block';
+
     }
-});
 
-/* Filter UI Toggle */
-document.querySelectorAll(".filter-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        btn.classList.toggle("active");
-    });
 });
 
 </script>
