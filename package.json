@@ -1,12 +1,1 @@
-{
-  "name": "github-ringtone-app",
-  "version": "1.0.0",
-  "description": "Ringtone web app with dynamic adding and playback features",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.19.2"
-  }
-}
+
