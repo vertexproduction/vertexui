@@ -1,22 +1,1248 @@
-<div class="cards">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farm House RNG — Roll Your Fate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rye&family=Nunito:wght@400;600;700;800;900&family=Permanent+Marker&display=swap" rel="stylesheet">
+  <style>
+    /* ── TOKENS ───────────────────────────────────────────── */
+    :root {
+      --hay:       #F5C842;
+      --hay-dark:  #C9972A;
+      --soil:      #6B3F1C;
+      --soil-mid:  #9B5E2B;
+      --soil-light:#D4956A;
+      --sky:       #87CEEB;
+      --sky-deep:  #3B82C4;
+      --grass:     #4CAF50;
+      --grass-dark:#2E7D32;
+      --barn:      #C0392B;
+      --barn-dark: #922B21;
+      --cream:     #FFF8EC;
+      --ink:       #1A0E00;
+      --muted:     #7B5C3E;
+      --card-bg:   rgba(255,248,236,0.92);
+      --shadow:    0 8px 32px rgba(60,20,0,0.18);
+    }
 
-    <div class="card show" id="gameCard">
+    /* ── RESET & BASE ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--soil);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
 
-        <img
-            class="thumb"
-            src="https://tr.rbxcdn.com/default/512/512/Image/Png"
-            alt="Build A Ring Farm"
-        >
+    /* ── ANIMATED SKY HERO ────────────────────────────────── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: linear-gradient(180deg, #1a2a4a 0%, #3B82C4 40%, #87CEEB 70%, #b8dba0 100%);
+    }
 
-        <div class="content">
-            <h3>
-                Build A Ring Farm
-                <span class="badge">✓</span>
-            </h3>
+    /* Stars */
+    .stars { position: absolute; inset: 0; pointer-events: none; }
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      animation: twinkle 3s infinite alternate;
+    }
 
-            <p>ID: 107646426076756</p>
+    @keyframes twinkle {
+      from { opacity: 0.2; transform: scale(0.8); }
+      to   { opacity: 1;   transform: scale(1.2); }
+    }
+
+    /* Sun / moon cycling */
+    .sun {
+      position: absolute;
+      top: 8%;
+      right: 12%;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #FFED58 40%, #F5C842 70%, transparent 100%);
+      box-shadow: 0 0 60px 20px rgba(255,230,80,0.5);
+      animation: sunrise 8s ease-in-out infinite alternate;
+    }
+    @keyframes sunrise {
+      0%   { top: 60%; opacity: 0.4; }
+      100% { top: 8%;  opacity: 1; }
+    }
+
+    /* Clouds */
+    .cloud {
+      position: absolute;
+      background: #fff;
+      border-radius: 50px;
+      opacity: 0.85;
+      animation: drift linear infinite;
+    }
+    .cloud::before, .cloud::after {
+      content: '';
+      position: absolute;
+      background: inherit;
+      border-radius: 50%;
+    }
+    .cloud::before { width: 55%; height: 130%; top: -40%; left: 15%; }
+    .cloud::after  { width: 40%; height: 110%; top: -25%; right: 15%; }
+    @keyframes drift {
+      from { transform: translateX(-200px); }
+      to   { transform: translateX(calc(100vw + 200px)); }
+    }
+
+    /* Ground / barn silhouette */
+    .ground-layer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+    }
+    .ground-grass {
+      height: 120px;
+      background: linear-gradient(180deg, #4CAF50 0%, #2E7D32 100%);
+      clip-path: polygon(0 40%, 5% 20%, 10% 35%, 18% 5%, 23% 30%, 30% 10%, 37% 38%, 44% 15%, 50% 35%, 58% 8%, 65% 32%, 72% 12%, 80% 40%, 88% 18%, 95% 38%, 100% 20%, 100% 100%, 0 100%);
+    }
+
+    /* Barn SVG decoration */
+    .barn-silhouette {
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 320px;
+      opacity: 0.25;
+    }
+
+    /* ── HERO CONTENT ─────────────────────────────────────── */
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem 1.5rem 14rem;
+    }
+
+    .game-badge {
+      display: inline-block;
+      background: var(--hay);
+      color: var(--soil);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.35rem 1.1rem;
+      border-radius: 100px;
+      margin-bottom: 1.2rem;
+      border: 2px solid var(--hay-dark);
+    }
+
+    .hero-title {
+      font-family: 'Rye', serif;
+      font-size: clamp(3rem, 10vw, 7.5rem);
+      color: var(--cream);
+      line-height: 1;
+      text-shadow: 4px 4px 0 var(--soil), 8px 8px 0 rgba(0,0,0,0.3);
+      margin-bottom: 0.3em;
+    }
+    .hero-title span { color: var(--hay); }
+
+    .hero-sub {
+      font-family: 'Permanent Marker', cursive;
+      font-size: clamp(1.1rem, 3vw, 1.8rem);
+      color: var(--sky);
+      letter-spacing: 0.05em;
+      margin-bottom: 2rem;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2.2rem;
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      border: none;
+    }
+    .btn:hover { transform: translateY(-3px); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--hay) 0%, var(--hay-dark) 100%);
+      color: var(--soil);
+      box-shadow: 0 6px 0 var(--soil), 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .btn-primary:hover { box-shadow: 0 8px 0 var(--soil), 0 12px 24px rgba(0,0,0,0.35); }
+    .btn-primary:active { transform: translateY(3px); box-shadow: 0 3px 0 var(--soil); }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.15);
+      color: var(--cream);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+      backdrop-filter: blur(8px);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.25); }
+
+    /* Scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+      z-index: 10;
+    }
+    .scroll-hint::after { content: ' ↓'; }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ── TICKER ───────────────────────────────────────────── */
+    .ticker-wrap {
+      background: var(--barn);
+      border-top: 3px solid var(--barn-dark);
+      border-bottom: 3px solid var(--barn-dark);
+      padding: 0.6rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .ticker-inner {
+      display: inline-block;
+      animation: ticker 30s linear infinite;
+    }
+    .ticker-inner span {
+      display: inline-block;
+      padding: 0 2.5rem;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: #fff;
+      letter-spacing: 0.05em;
+    }
+    .ticker-inner span::before { content: '🌾 '; }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── SECTIONS ─────────────────────────────────────────── */
+    section { padding: 5rem 1.5rem; }
+
+    .section-label {
+      display: inline-block;
+      font-weight: 900;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--hay);
+      margin-bottom: 0.6rem;
+    }
+
+    h2.section-title {
+      font-family: 'Rye', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--cream);
+      margin-bottom: 1.2rem;
+      text-shadow: 2px 2px 0 var(--soil-mid);
+    }
+
+    .section-desc {
+      color: var(--soil-light);
+      font-size: 1.05rem;
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    /* ── ABOUT ────────────────────────────────────────────── */
+    #about {
+      background: linear-gradient(180deg, var(--soil) 0%, #3D1F09 100%);
+    }
+    .about-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    @media (max-width: 750px) { .about-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+
+    .about-visual {
+      position: relative;
+    }
+    .about-farm-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      border: 3px solid var(--hay);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-farm-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 6px;
+      background: repeating-linear-gradient(90deg, var(--hay) 0, var(--hay) 20px, var(--barn) 20px, var(--barn) 40px);
+    }
+    .farm-emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      margin: 1.5rem 0;
+    }
+    .farm-emoji-grid span {
+      font-size: 2rem;
+      display: block;
+      animation: float 3s ease-in-out infinite;
+    }
+    .farm-emoji-grid span:nth-child(2n) { animation-delay: 0.5s; }
+    .farm-emoji-grid span:nth-child(3n) { animation-delay: 1s; }
+    .farm-emoji-grid span:nth-child(4n) { animation-delay: 1.5s; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-6px); }
+    }
+    .rng-meter {
+      background: var(--soil);
+      border-radius: 100px;
+      height: 16px;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+    .rng-meter-fill {
+      height: 100%;
+      border-radius: 100px;
+      background: linear-gradient(90deg, var(--grass), var(--hay), var(--barn));
+      animation: rng-pulse 2s ease-in-out infinite alternate;
+    }
+    @keyframes rng-pulse {
+      from { width: 30%; }
+      to   { width: 95%; }
+    }
+    .rng-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--soil);
+      margin-top: 0.4rem;
+      text-align: center;
+    }
+
+    /* ── RARITIES ─────────────────────────────────────────── */
+    #rarities {
+      background: #1A0E00;
+    }
+    .rarities-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+    .rarity-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.25rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .rarity-card {
+      border-radius: 18px;
+      padding: 1.6rem 1.2rem 1.4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+      transition: transform 0.2s;
+      border: 2px solid transparent;
+    }
+    .rarity-card:hover { transform: scale(1.04) rotate(-1deg); }
+
+    .rarity-card.common   { background: linear-gradient(145deg,#2a2a2a,#444); border-color:#888; }
+    .rarity-card.uncommon { background: linear-gradient(145deg,#0d3320,#1a6640); border-color:#4CAF50; }
+    .rarity-card.rare     { background: linear-gradient(145deg,#0a1f4a,#1a3a8f); border-color:#5B9BD5; }
+    .rarity-card.epic     { background: linear-gradient(145deg,#2d0a4a,#6a1a9a); border-color:#B04FFF; }
+    .rarity-card.legendary{ background: linear-gradient(145deg,#3a2000,#8a5000); border-color:var(--hay); box-shadow: 0 0 30px rgba(245,200,66,0.4); }
+    .rarity-card.mythic   { background: linear-gradient(145deg,#2a0010,#7a0035); border-color:#FF2D6B; box-shadow: 0 0 40px rgba(255,45,107,0.5); }
+    .rarity-card.divine   { background: linear-gradient(145deg,#001a3a,#00307a); border-color:#00CFFF; box-shadow: 0 0 50px rgba(0,207,255,0.6); }
+
+    .rarity-icon { font-size: 2.8rem; margin-bottom: 0.6rem; display: block; }
+    .rarity-name {
+      font-family: 'Rye', serif;
+      font-size: 1.05rem;
+      color: #fff;
+      margin-bottom: 0.25rem;
+    }
+    .rarity-chance {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      color: #ddd;
+    }
+    .rarity-item {
+      margin-top: 0.6rem;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.7);
+      font-weight: 600;
+    }
+
+    /* Shimmer on legendary+ */
+    .rarity-card.legendary::after,
+    .rarity-card.mythic::after,
+    .rarity-card.divine::after {
+      content: '';
+      position: absolute;
+      top: -60%;
+      left: -60%;
+      width: 50%;
+      height: 220%;
+      background: rgba(255,255,255,0.08);
+      transform: rotate(30deg);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%   { left: -60%; }
+      100% { left: 160%; }
+    }
+
+    /* ── FEATURES ─────────────────────────────────────────── */
+    #features {
+      background: linear-gradient(180deg, #3D1F09 0%, var(--soil) 100%);
+    }
+    .features-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 2rem;
+      border: 2.5px solid rgba(245,200,66,0.25);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--hay);
+    }
+    .feature-icon {
+      font-size: 2.4rem;
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+    .feature-title {
+      font-family: 'Rye', serif;
+      font-size: 1.15rem;
+      color: var(--soil);
+      margin-bottom: 0.5rem;
+    }
+    .feature-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── LEADERBOARD ──────────────────────────────────────── */
+    #leaderboard {
+      background: #1A0E00;
+    }
+    .lb-header { text-align: center; margin-bottom: 3rem; }
+    .lb-table {
+      max-width: 700px;
+      margin: 0 auto;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 2px solid rgba(245,200,66,0.3);
+    }
+    .lb-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 1fr auto;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: rgba(255,248,236,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: background 0.15s;
+    }
+    .lb-row:hover { background: rgba(255,248,236,0.1); }
+    .lb-row.header {
+      background: var(--barn);
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      border-bottom: 2px solid var(--barn-dark);
+    }
+    .lb-rank {
+      font-family: 'Rye', serif;
+      font-size: 1.3rem;
+      color: var(--hay);
+    }
+    .lb-rank.top1 { color: gold; text-shadow: 0 0 10px gold; }
+    .lb-rank.top2 { color: #ccc; }
+    .lb-rank.top3 { color: #cd7f32; }
+    .lb-name  { font-weight: 800; color: #fff; font-size: 0.95rem; }
+    .lb-rarity { font-size: 0.82rem; font-weight: 700; }
+    .lb-rarity.divine   { color: #00CFFF; }
+    .lb-rarity.mythic   { color: #FF2D6B; }
+    .lb-rarity.legendary{ color: var(--hay); }
+    .lb-rarity.epic     { color: #B04FFF; }
+    .lb-rolls { font-size: 0.8rem; color: rgba(255,255,255,0.45); font-weight: 700; }
+
+    /* ── ROLL SIMULATOR ───────────────────────────────────── */
+    #simulator {
+      background: linear-gradient(180deg, var(--soil) 0%, #2a1000 100%);
+      text-align: center;
+    }
+    .sim-box {
+      max-width: 500px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      box-shadow: var(--shadow);
+      border: 3px solid var(--hay);
+      position: relative;
+      overflow: hidden;
+    }
+    .sim-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 6px;
+      background: repeating-linear-gradient(90deg, var(--hay) 0, var(--hay) 20px, var(--barn) 20px, var(--barn) 40px);
+    }
+    .sim-result {
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 1.5rem 0;
+    }
+    .sim-emoji {
+      font-size: 4rem;
+      display: block;
+      animation: pop 0.4s cubic-bezier(0.36,0.07,0.19,0.97);
+    }
+    @keyframes pop {
+      0%   { transform: scale(0) rotate(-10deg); opacity: 0; }
+      60%  { transform: scale(1.2) rotate(5deg); }
+      100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
+    .sim-rarity-name {
+      font-family: 'Rye', serif;
+      font-size: 1.5rem;
+      margin-top: 0.4rem;
+    }
+    .sim-item-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+    .sim-rolls {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .roll-btn {
+      width: 100%;
+      padding: 1rem;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--hay) 0%, var(--hay-dark) 100%);
+      border: none;
+      font-family: 'Rye', serif;
+      font-size: 1.2rem;
+      color: var(--soil);
+      cursor: pointer;
+      box-shadow: 0 5px 0 var(--soil-mid);
+      transition: transform 0.1s, box-shadow 0.1s;
+      letter-spacing: 0.05em;
+    }
+    .roll-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--soil-mid); }
+    .roll-btn:hover:not(:active) { filter: brightness(1.08); }
+    .auto-roll-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .auto-roll-label input { accent-color: var(--barn); }
+
+    /* ── UPDATES ──────────────────────────────────────────── */
+    #updates {
+      background: #1A0E00;
+    }
+    .updates-header { text-align: center; margin-bottom: 3rem; }
+    .updates-list {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .update-card {
+      background: rgba(255,248,236,0.05);
+      border-radius: 16px;
+      border: 1.5px solid rgba(245,200,66,0.2);
+      padding: 1.4rem 1.6rem;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.2rem;
+      align-items: start;
+      transition: border-color 0.2s;
+    }
+    .update-card:hover { border-color: var(--hay); }
+    .update-date {
+      font-family: 'Rye', serif;
+      font-size: 0.78rem;
+      color: var(--hay);
+      text-align: center;
+      background: rgba(245,200,66,0.1);
+      border-radius: 10px;
+      padding: 0.4rem 0.7rem;
+      white-space: nowrap;
+    }
+    .update-title {
+      font-weight: 900;
+      color: #fff;
+      font-size: 0.95rem;
+      margin-bottom: 0.3rem;
+    }
+    .update-body {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.5;
+    }
+    .update-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      margin-left: 0.6rem;
+      vertical-align: middle;
+    }
+    .update-tag.new     { background: var(--grass-dark); color: #fff; }
+    .update-tag.fix     { background: var(--sky-deep); color: #fff; }
+    .update-tag.balance { background: var(--barn); color: #fff; }
+
+    /* ── FAQ ──────────────────────────────────────────────── */
+    #faq {
+      background: linear-gradient(180deg, #2a1000 0%, var(--soil) 100%);
+    }
+    .faq-header { text-align: center; margin-bottom: 3rem; }
+    .faq-list {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+    details.faq-item {
+      background: rgba(255,248,236,0.06);
+      border-radius: 14px;
+      border: 1.5px solid rgba(245,200,66,0.2);
+      overflow: hidden;
+    }
+    details.faq-item[open] { border-color: var(--hay); }
+    summary.faq-q {
+      padding: 1.1rem 1.4rem;
+      font-weight: 800;
+      color: var(--cream);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      list-style: none;
+      font-size: 0.95rem;
+    }
+    summary.faq-q::after { content: '＋'; font-size: 1.2rem; color: var(--hay); }
+    details.faq-item[open] summary.faq-q::after { content: '－'; }
+    .faq-a {
+      padding: 0 1.4rem 1.2rem;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+    footer {
+      background: #0d0700;
+      border-top: 3px solid var(--barn);
+      padding: 3rem 1.5rem 2rem;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Rye', serif;
+      font-size: 1.8rem;
+      color: var(--hay);
+      margin-bottom: 0.5rem;
+    }
+    .footer-tagline {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 1.5rem;
+    }
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .footer-links a {
+      color: rgba(255,255,255,0.45);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.82rem;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--hay); }
+    .footer-copy {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.2);
+    }
+
+    /* ── NAV ──────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 0.9rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10,5,0,0.6);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(245,200,66,0.15);
+      transition: background 0.3s;
+    }
+    .nav-logo {
+      font-family: 'Rye', serif;
+      font-size: 1.15rem;
+      color: var(--hay);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+    @media (max-width: 600px) { .nav-links { display: none; } }
+    .nav-links a {
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.82rem;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--hay); }
+    .nav-cta {
+      background: var(--hay);
+      color: var(--soil);
+      font-weight: 900;
+      font-size: 0.82rem;
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero">🌾 Farm House RNG</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#rarities">Rarities</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#simulator">Try It</a></li>
+    <li><a href="#updates">Updates</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a class="nav-cta" href="https://www.roblox.com/games" target="_blank">▶ Play Now</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="stars" id="stars"></div>
+  <div class="sun"></div>
+
+  <!-- Clouds -->
+  <div class="cloud" style="width:180px;height:55px;top:18%;animation-duration:35s;animation-delay:-10s;opacity:0.7;"></div>
+  <div class="cloud" style="width:130px;height:40px;top:28%;animation-duration:50s;animation-delay:-25s;"></div>
+  <div class="cloud" style="width:220px;height:65px;top:14%;animation-duration:45s;animation-delay:-5s;opacity:0.5;"></div>
+
+  <div class="hero-content">
+    <span class="game-badge">🎲 Roblox Game</span>
+    <h1 class="hero-title">Farm House<br><span>RNG</span></h1>
+    <p class="hero-sub">Roll the dice. Reap the rewards.</p>
+    <div class="hero-btns">
+      <a class="btn btn-primary" href="https://www.roblox.com/games" target="_blank">▶ Play on Roblox</a>
+      <a class="btn btn-secondary" href="#rarities">View Rarities</a>
+    </div>
+  </div>
+
+  <div class="ground-layer">
+    <svg class="barn-silhouette" viewBox="0 0 320 200" fill="white" xmlns="http://www.w3.org/2000/svg">
+      <!-- Barn body -->
+      <rect x="40" y="90" width="240" height="110" rx="4"/>
+      <!-- Roof -->
+      <polygon points="20,90 160,10 300,90"/>
+      <!-- Silo left -->
+      <rect x="5" y="50" width="40" height="150" rx="20"/>
+      <ellipse cx="25" cy="50" rx="20" ry="10"/>
+      <!-- Door -->
+      <rect x="130" y="140" width="60" height="60" rx="4" fill="#1A0E00"/>
+      <!-- Window -->
+      <circle cx="85" cy="120" r="18" fill="#1A0E00"/>
+      <circle cx="235" cy="120" r="18" fill="#1A0E00"/>
+    </svg>
+    <div class="ground-grass"></div>
+  </div>
+
+  <span class="scroll-hint">Scroll</span>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-inner" id="tickerInner">
+    <span>NEW UPDATE: Haunted Harvest</span>
+    <span>Legendary drop rate boosted this weekend</span>
+    <span>New mythic item: Golden Scarecrow</span>
+    <span>50,000 players online</span>
+    <span>Season 4 now live</span>
+    <span>Double XP event active</span>
+    <span>NEW UPDATE: Haunted Harvest</span>
+    <span>Legendary drop rate boosted this weekend</span>
+    <span>New mythic item: Golden Scarecrow</span>
+    <span>50,000 players online</span>
+    <span>Season 4 now live</span>
+    <span>Double XP event active</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div>
+      <span class="section-label">The Game</span>
+      <h2 class="section-title">What is Farm House RNG?</h2>
+      <p class="section-desc">
+        Farm House RNG is a luck-based Roblox experience set on a sprawling countryside estate. Every roll of the RNG machine can yield anything from a rusty pitchfork to an otherworldly Divine Sunflower — it's all down to chance, patience, and a little bit of farm magic.
+      </p>
+      <p class="section-desc" style="margin-top:1rem;">
+        Collect hundreds of unique farm items, unlock hidden auras, climb the leaderboard, and flex your rarest pulls. No two runs are ever the same.
+      </p>
+    </div>
+    <div class="about-visual">
+      <div class="about-farm-card">
+        <p style="font-family:'Rye',serif;font-size:1rem;color:var(--soil);margin-bottom:0.5rem;">Your Inventory</p>
+        <div class="farm-emoji-grid">
+          <span title="Common Hay">🌾</span>
+          <span title="Sunflower">🌻</span>
+          <span title="Carrot">🥕</span>
+          <span title="Pumpkin">🎃</span>
+          <span title="Corn">🌽</span>
+          <span title="Chicken">🐔</span>
+          <span title="Cow">🐄</span>
+          <span title="Crystal Turnip">💎</span>
+          <span title="Horseshoe">🧲</span>
+          <span title="Golden Egg">🥚</span>
+          <span title="Rainbow Apple">🍎</span>
+          <span title="???">✨</span>
         </div>
+        <div style="background:var(--soil);border-radius:12px;padding:0.8rem;margin-top:0.5rem;">
+          <p style="font-size:0.75rem;font-weight:800;color:var(--hay);margin-bottom:0.4rem;">LUCK METER</p>
+          <div class="rng-meter"><div class="rng-meter-fill"></div></div>
+          <p class="rng-label" style="color:var(--soil-light);">Rolling... 🎲</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- RARITIES -->
+<section id="rarities">
+  <div class="rarities-header">
+    <span class="section-label">Drop Rates</span>
+    <h2 class="section-title">Rarity Tiers</h2>
+    <p class="section-desc" style="margin:0 auto;text-align:center;">From rusty pitchforks to world-ending harvests — every roll is a new story.</p>
+  </div>
+  <div class="rarity-grid">
+    <div class="rarity-card common">
+      <span class="rarity-icon">🌾</span>
+      <p class="rarity-name">Common</p>
+      <p class="rarity-chance">1 in 2</p>
+      <p class="rarity-item">Hay Bale, Pitchfork, Watering Can</p>
+    </div>
+    <div class="rarity-card uncommon">
+      <span class="rarity-icon">🥕</span>
+      <p class="rarity-name">Uncommon</p>
+      <p class="rarity-chance">1 in 10</p>
+      <p class="rarity-item">Golden Carrot, Lucky Clover, Barn Cat</p>
+    </div>
+    <div class="rarity-card rare">
+      <span class="rarity-icon">💎</span>
+      <p class="rarity-name">Rare</p>
+      <p class="rarity-chance">1 in 50</p>
+      <p class="rarity-item">Crystal Turnip, Rain Cloud, Harvest Moon</p>
+    </div>
+    <div class="rarity-card epic">
+      <span class="rarity-icon">🔮</span>
+      <p class="rarity-name">Epic</p>
+      <p class="rarity-chance">1 in 250</p>
+      <p class="rarity-item">Phantom Plow, Spirit Rooster, Void Silo</p>
+    </div>
+    <div class="rarity-card legendary">
+      <span class="rarity-icon">⭐</span>
+      <p class="rarity-name">Legendary</p>
+      <p class="rarity-chance">1 in 1,500</p>
+      <p class="rarity-item">Golden Scarecrow, Solar Barn, Sun Drake</p>
+    </div>
+    <div class="rarity-card mythic">
+      <span class="rarity-icon">🌹</span>
+      <p class="rarity-name">Mythic</p>
+      <p class="rarity-chance">1 in 10,000</p>
+      <p class="rarity-item">Blood Rose, Cursed Harvest, Demon Tractor</p>
+    </div>
+    <div class="rarity-card divine">
+      <span class="rarity-icon">✨</span>
+      <p class="rarity-name">Divine</p>
+      <p class="rarity-chance">1 in 100,000</p>
+      <p class="rarity-item">Celestial Sunflower, God's Plough, True Farm</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="features-header">
+    <span class="section-label">What's Inside</span>
+    <h2 class="section-title">Game Features</h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">🎲</span>
+      <h3 class="feature-title">Pure RNG Rolling</h3>
+      <p class="feature-desc">Spin the wheel every few seconds. No skill ceiling, just raw luck and the thrill of the drop. Use luck potions to tip the odds in your favour.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🌾</span>
+      <h3 class="feature-title">Hundreds of Items</h3>
+      <p class="feature-desc">Over 200 unique farm-themed collectables across all rarity tiers, with seasonal exclusives arriving every major update.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🏆</span>
+      <h3 class="feature-title">Global Leaderboard</h3>
+      <p class="feature-desc">Compete with thousands of players worldwide. Rankings reset seasonally, giving everyone a fresh shot at #1.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">✨</span>
+      <h3 class="feature-title">Aura System</h3>
+      <p class="feature-desc">Unlock glowing auras around your character based on your rarest pulled item. Show off your Divine aura and turn heads.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧪</span>
+      <h3 class="feature-title">Luck Potions</h3>
+      <p class="feature-desc">Brew, trade, or earn potions that temporarily boost your drop rates. Stack them wisely — big rolls deserve big buffs.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🤝</span>
+      <h3 class="feature-title">Trading System</h3>
+      <p class="feature-desc">Trade items with other farmers. Build sets, collect duplicates, and negotiate the deal of the season at the Farmer's Market.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LEADERBOARD -->
+<section id="leaderboard">
+  <div class="lb-header">
+    <span class="section-label">Hall of Fame</span>
+    <h2 class="section-title">Top Farmers</h2>
+    <p class="section-desc" style="margin:0 auto 0;text-align:center;">The luckiest rollers on the server this season.</p>
+  </div>
+  <div class="lb-table">
+    <div class="lb-row header">
+      <span>Rank</span><span>Player</span><span>Best Roll</span><span>Rolls</span>
+    </div>
+    <div class="lb-row">
+      <span class="lb-rank top1">🥇</span>
+      <span class="lb-name">xXFarmGodXx</span>
+      <span class="lb-rarity divine">Divine ✨</span>
+      <span class="lb-rolls">847,221</span>
+    </div>
+    <div class="lb-row">
+      <span class="lb-rank top2">🥈</span>
+      <span class="lb-name">HarvestKing</span>
+      <span class="lb-rarity mythic">Mythic 🌹</span>
+      <span class="lb-rolls">612,045</span>
+    </div>
+    <div class="lb-row">
+      <span class="lb-rank top3">🥉</span>
+      <span class="lb-name">LuckyPlopper</span>
+      <span class="lb-rarity mythic">Mythic 🌹</span>
+      <span class="lb-rolls">521,883</span>
+    </div>
+    <div class="lb-row">
+      <span class="lb-rank">4</span>
+      <span class="lb-name">cornfieldking</span>
+      <span class="lb-rarity legendary">Legendary ⭐</span>
+      <span class="lb-rolls">399,102</span>
+    </div>
+    <div class="lb-row">
+      <span class="lb-rank">5</span>
+      <span class="lb-name">SunflowerQueen</span>
+      <span class="lb-rarity legendary">Legendary ⭐</span>
+      <span class="lb-rolls">310,774</span>
+    </div>
+    <div class="lb-row">
+      <span class="lb-rank">6</span>
+      <span class="lb-name">TractorSam99</span>
+      <span class="lb-rarity epic">Epic 🔮</span>
+      <span class="lb-rolls">204,551</span>
+    </div>
+    <div class="lb-row">
+      <span class="lb-rank">7</span>
+      <span class="lb-name">haybalerz</span>
+      <span class="lb-rarity epic">Epic 🔮</span>
+      <span class="lb-rolls">197,004</span>
+    </div>
+  </div>
+</section>
+
+<!-- ROLL SIMULATOR -->
+<section id="simulator">
+  <span class="section-label">Try Your Luck</span>
+  <h2 class="section-title" style="text-align:center;margin-bottom:2rem;">Roll Simulator</h2>
+  <div class="sim-box">
+    <p style="font-family:'Rye',serif;color:var(--soil);font-size:1.1rem;margin-bottom:0.3rem;">🎲 RNG Machine</p>
+    <p style="font-size:0.8rem;color:var(--muted);">See what fate has in store for you.</p>
+
+    <div class="sim-result" id="simResult">
+      <span class="sim-emoji" id="simEmoji">🎰</span>
+      <p class="sim-rarity-name" id="simRarityName" style="color:var(--soil);">Ready to roll?</p>
+      <p class="sim-item-name" id="simItemName">Hit the button below</p>
     </div>
 
-</div>
+    <p class="sim-rolls" id="simRollCount">0 rolls this session</p>
+
+    <button class="roll-btn" id="rollBtn" onclick="doRoll()">🌾 Roll!</button>
+
+    <label class="auto-roll-label">
+      <input type="checkbox" id="autoRollToggle" onchange="toggleAutoRoll()">
+      Auto-Roll (every 2s)
+    </label>
+  </div>
+</section>
+
+<!-- UPDATES -->
+<section id="updates">
+  <div class="updates-header">
+    <span class="section-label">Patch Notes</span>
+    <h2 class="section-title">Recent Updates</h2>
+  </div>
+  <div class="updates-list">
+    <div class="update-card">
+      <div class="update-date">Jun<br>2025</div>
+      <div>
+        <p class="update-title">🎃 Haunted Harvest Update <span class="update-tag new">New</span></p>
+        <p class="update-body">Added 18 new Halloween-themed items including the Demon Tractor (Mythic) and Ghost Scarecrow (Epic). New limited-time Cursed Barn map is now live for the season.</p>
+      </div>
+    </div>
+    <div class="update-card">
+      <div class="update-date">May<br>2025</div>
+      <div>
+        <p class="update-title">⚖️ Drop Rate Rebalance <span class="update-tag balance">Balance</span></p>
+        <p class="update-body">Legendary drop rate increased from 1 in 2,000 to 1 in 1,500. Rare items tuned down slightly. Common pool expanded with 12 new filler items.</p>
+      </div>
+    </div>
+    <div class="update-card">
+      <div class="update-date">Apr<br>2025</div>
+      <div>
+        <p class="update-title">🤝 Farmer's Market <span class="update-tag new">New</span></p>
+        <p class="update-body">Trading is finally here! Visit the Farmer's Market in the south field to swap items with other players. Trade locks prevent scamming.</p>
+      </div>
+    </div>
+    <div class="update-card">
+      <div class="update-date">Mar<br>2025</div>
+      <div>
+        <p class="update-title">🐛 Aura Bug Fix <span class="update-tag fix">Fix</span></p>
+        <p class="update-body">Fixed an issue where Divine auras would disappear after rejoining the server. Aura persistence is now saved to your profile correctly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="faq-header">
+    <span class="section-label">Got Questions?</span>
+    <h2 class="section-title">FAQ</h2>
+  </div>
+  <div class="faq-list">
+    <details class="faq-item">
+      <summary class="faq-q">How do I get better drop rates?</summary>
+      <p class="faq-a">You can brew Luck Potions in the Potion Shed, buy them from other players at the Farmer's Market, or earn them from daily login rewards. Stacking potions multiplies their effect up to 5×.</p>
+    </details>
+    <details class="faq-item">
+      <summary class="faq-q">Are there any secret items?</summary>
+      <p class="faq-a">Yes! There are 5 hidden "????" items that only appear under specific conditions — certain times of day, weather events, or after reaching milestones. The community wiki has partial clues.</p>
+    </details>
+    <details class="faq-item">
+      <summary class="faq-q">When does the season reset?</summary>
+      <p class="faq-a">Seasons last approximately 60 days. The leaderboard resets at the start of each new season but your inventory and unlocked items carry over permanently.</p>
+    </details>
+    <details class="faq-item">
+      <summary class="faq-q">Can I trade Divine items?</summary>
+      <p class="faq-a">Divine items are untradeable by design — they're meant to be a personal achievement. All other rarities including Mythic can be freely traded at the Farmer's Market.</p>
+    </details>
+    <details class="faq-item">
+      <summary class="faq-q">Is the game mobile-friendly?</summary>
+      <p class="faq-a">Absolutely. Farm House RNG is fully playable on Roblox mobile. The roll button is large and all UI elements are touch-optimised.</p>
+    </details>
+    <details class="faq-item">
+      <summary class="faq-q">How do I report a bug?</summary>
+      <p class="faq-a">Join the official Discord server (link in-game) and post in #bug-reports. Include your username, the issue, and screenshots if possible. We aim to patch within 48 hours.</p>
+    </details>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-logo">🌾 Farm House RNG</p>
+  <p class="footer-tagline">Roll the dice. Own the farm.</p>
+  <nav class="footer-links">
+    <a href="https://www.roblox.com/games" target="_blank">Play on Roblox</a>
+    <a href="#rarities">Rarities</a>
+    <a href="#updates">Updates</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <p class="footer-copy">Farm House RNG is a fan-made Roblox experience. Not affiliated with Roblox Corporation.</p>
+</footer>
+
+<!-- SCRIPTS -->
+<script>
+  /* ── STARS ─────────────────────────────────────────────── */
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 3 + 1;
+    s.style.cssText = `
+      width:${size}px;height:${size}px;
+      top:${Math.random()*60}%;
+      left:${Math.random()*100}%;
+      animation-delay:${Math.random()*3}s;
+      animation-duration:${2+Math.random()*3}s;
+    `;
+    starsEl.appendChild(s);
+  }
+
+  /* ── ROLL SIMULATOR ─────────────────────────────────────── */
+  const POOL = [
+    { rarity:'Common',   color:'#888',    items:['🌾 Hay Bale','🪣 Old Bucket','🪓 Pitchfork','🌱 Seedling'],   chance: 50 },
+    { rarity:'Uncommon', color:'#4CAF50', items:['🥕 Golden Carrot','🍀 Lucky Clover','🐔 Barn Cat'],            chance: 30 },
+    { rarity:'Rare',     color:'#5B9BD5', items:['💎 Crystal Turnip','🌧️ Rain Cloud','🌕 Harvest Moon'],         chance: 13 },
+    { rarity:'Epic',     color:'#B04FFF', items:['🔮 Phantom Plow','👻 Spirit Rooster','🕳️ Void Silo'],          chance: 5  },
+    { rarity:'Legendary',color:'#F5C842', items:['⭐ Golden Scarecrow','🌞 Solar Barn','🐉 Sun Drake'],           chance: 1.5},
+    { rarity:'Mythic',   color:'#FF2D6B', items:['🌹 Blood Rose','💀 Cursed Harvest','🚜 Demon Tractor'],        chance: 0.4},
+    { rarity:'Divine',   color:'#00CFFF', items:['✨ Celestial Sunflower',"⚡ God's Plough",'🏡 True Farm'],     chance: 0.1},
+  ];
+
+  let rollCount = 0;
+  let autoInterval = null;
+
+  function pickResult() {
+    const total = POOL.reduce((s, r) => s + r.chance, 0);
+    let roll = Math.random() * total;
+    for (const tier of POOL) {
+      roll -= tier.chance;
+      if (roll <= 0) return tier;
+    }
+    return POOL[0];
+  }
+
+  function doRoll() {
+    rollCount++;
+    document.getElementById('simRollCount').textContent = `${rollCount.toLocaleString()} roll${rollCount===1?'':'s'} this session`;
+
+    const tier = pickResult();
+    const item = tier.items[Math.floor(Math.random() * tier.items.length)];
+    const [emoji, ...nameParts] = item.split(' ');
+
+    const emojiEl = document.getElementById('simEmoji');
+    const nameEl  = document.getElementById('simRarityName');
+    const itemEl  = document.getElementById('simItemName');
+
+    // re-trigger animation
+    emojiEl.style.animation = 'none';
+    void emojiEl.offsetWidth;
+    emojiEl.style.animation = '';
+
+    emojiEl.textContent = emoji;
+    nameEl.textContent  = tier.rarity;
+    nameEl.style.color  = tier.color;
+    itemEl.textContent  = nameParts.join(' ');
+  }
+
+  function toggleAutoRoll() {
+    const checked = document.getElementById('autoRollToggle').checked;
+    if (checked) {
+      autoInterval = setInterval(doRoll, 2000);
+    } else {
+      clearInterval(autoInterval);
+      autoInterval = null;
+    }
+  }
+</script>
+
+</body>
+</html>
