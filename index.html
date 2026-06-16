@@ -792,6 +792,180 @@
       transition: opacity 0.15s;
     }
     .nav-cta:hover { opacity: 0.85; }
+
+    /* ── ITEMS DATABASE ───────────────────────────────────── */
+    #items {
+      background: linear-gradient(180deg, #1A0E00 0%, #2a1000 100%);
+    }
+    .items-header { text-align: center; margin-bottom: 2rem; }
+
+    /* Filter bar */
+    .items-controls {
+      max-width: 1100px;
+      margin: 0 auto 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: center;
+    }
+    .items-search {
+      flex: 1 1 220px;
+      max-width: 320px;
+      background: rgba(255,248,236,0.07);
+      border: 1.5px solid rgba(245,200,66,0.25);
+      border-radius: 10px;
+      padding: 0.6rem 1rem;
+      color: #fff;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .items-search::placeholder { color: rgba(255,255,255,0.3); }
+    .items-search:focus { border-color: var(--hay); }
+
+    .filter-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .filter-tab {
+      padding: 0.45rem 1rem;
+      border-radius: 100px;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      background: transparent;
+      color: rgba(255,255,255,0.55);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-tab:hover { border-color: var(--hay); color: var(--hay); }
+    .filter-tab.active {
+      background: var(--hay);
+      border-color: var(--hay);
+      color: var(--soil);
+    }
+
+    .sort-select {
+      background: rgba(255,248,236,0.07);
+      border: 1.5px solid rgba(245,200,66,0.25);
+      border-radius: 10px;
+      padding: 0.6rem 0.9rem;
+      color: rgba(255,255,255,0.75);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+    }
+    .sort-select option { background: #2a1000; color: #fff; }
+
+    /* Items count badge */
+    .items-count {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Grid */
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .item-card {
+      background: rgba(255,248,236,0.05);
+      border-radius: 16px;
+      border: 1.5px solid rgba(255,255,255,0.08);
+      padding: 1.2rem 1rem 1rem;
+      text-align: center;
+      transition: transform 0.18s, border-color 0.18s, background 0.18s;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .item-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255,248,236,0.1);
+    }
+
+    /* rarity glow on border */
+    .item-card[data-rarity="Common"]    { border-color: rgba(136,136,136,0.35); }
+    .item-card[data-rarity="Uncommon"]  { border-color: rgba(76,175,80,0.4); }
+    .item-card[data-rarity="Rare"]      { border-color: rgba(91,155,213,0.5); }
+    .item-card[data-rarity="Epic"]      { border-color: rgba(176,79,255,0.55); }
+    .item-card[data-rarity="Legendary"] { border-color: rgba(245,200,66,0.7); box-shadow: 0 0 18px rgba(245,200,66,0.15); }
+    .item-card[data-rarity="Mythic"]    { border-color: rgba(255,45,107,0.7);  box-shadow: 0 0 22px rgba(255,45,107,0.2); }
+    .item-card[data-rarity="Divine"]    { border-color: rgba(0,207,255,0.7);   box-shadow: 0 0 28px rgba(0,207,255,0.25); }
+
+    .item-card:hover[data-rarity="Common"]    { border-color: #888; }
+    .item-card:hover[data-rarity="Uncommon"]  { border-color: #4CAF50; }
+    .item-card:hover[data-rarity="Rare"]      { border-color: #5B9BD5; }
+    .item-card:hover[data-rarity="Epic"]      { border-color: #B04FFF; }
+    .item-card:hover[data-rarity="Legendary"] { border-color: var(--hay); }
+    .item-card:hover[data-rarity="Mythic"]    { border-color: #FF2D6B; }
+    .item-card:hover[data-rarity="Divine"]    { border-color: #00CFFF; }
+
+    .item-emoji { font-size: 2.4rem; display: block; margin-bottom: 0.5rem; }
+    .item-name {
+      font-weight: 900;
+      font-size: 0.88rem;
+      color: #fff;
+      margin-bottom: 0.3rem;
+      line-height: 1.3;
+    }
+    .item-rarity-pill {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.18rem 0.6rem;
+      border-radius: 100px;
+      margin-bottom: 0.6rem;
+    }
+    .pill-Common    { background: rgba(136,136,136,0.25); color: #bbb; }
+    .pill-Uncommon  { background: rgba(76,175,80,0.25);   color: #6be56e; }
+    .pill-Rare      { background: rgba(91,155,213,0.25);  color: #7bbfff; }
+    .pill-Epic      { background: rgba(176,79,255,0.25);  color: #d088ff; }
+    .pill-Legendary { background: rgba(245,200,66,0.25);  color: var(--hay); }
+    .pill-Mythic    { background: rgba(255,45,107,0.25);  color: #ff6b96; }
+    .pill-Divine    { background: rgba(0,207,255,0.2);    color: #00CFFF; }
+
+    .item-price {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--hay);
+    }
+    .item-price span { color: rgba(255,255,255,0.4); font-weight: 600; font-size: 0.7rem; }
+
+    .item-obtain {
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.35);
+      margin-top: 0.3rem;
+      font-weight: 700;
+    }
+
+    .no-results {
+      text-align: center;
+      color: rgba(255,255,255,0.3);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 3rem 0;
+      grid-column: 1/-1;
+    }
   </style>
 </head>
 <body>
@@ -804,6 +978,7 @@
     <li><a href="#rarities">Rarities</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#simulator">Try It</a></li>
+    <li><a href="#items">Items</a></li>
     <li><a href="#updates">Updates</a></li>
     <li><a href="#faq">FAQ</a></li>
   </ul>
@@ -995,9 +1170,9 @@
       <p class="feature-desc">Brew, trade, or earn potions that temporarily boost your drop rates. Stack them wisely — big rolls deserve big buffs.</p>
     </div>
     <div class="feature-card">
-      <span class="feature-icon">🤝</span>
-      <h3 class="feature-title">Trading System</h3>
-      <p class="feature-desc">Trade items with other farmers. Build sets, collect duplicates, and negotiate the deal of the season at the Farmer's Market.</p>
+      <span class="feature-icon">🚫</span>
+      <h3 class="feature-title">No Gifting</h3>
+      <p class="feature-desc">Gifting is fully disabled in Farm House RNG. Every item in your inventory was earned by your own rolls — no handouts, no transfers. What you get is purely yours.</p>
     </div>
   </div>
 </section>
@@ -1141,8 +1316,8 @@
       <p class="faq-a">Seasons last approximately 60 days. The leaderboard resets at the start of each new season but your inventory and unlocked items carry over permanently.</p>
     </details>
     <details class="faq-item">
-      <summary class="faq-q">Can I trade Divine items?</summary>
-      <p class="faq-a">Divine items are untradeable by design — they're meant to be a personal achievement. All other rarities including Mythic can be freely traded at the Farmer's Market.</p>
+      <summary class="faq-q">Can I trade or gift items to other players?</summary>
+      <p class="faq-a">No — gifting and trading are fully disabled in Farm House RNG. All items must be earned through your own rolls. This keeps the game fair and ensures every inventory is 100% self-earned.</p>
     </details>
     <details class="faq-item">
       <summary class="faq-q">Is the game mobile-friendly?</summary>
